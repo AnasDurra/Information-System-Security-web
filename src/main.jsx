@@ -9,6 +9,7 @@ import Register from "./routes/registration/Register.jsx";
 import Login from "./routes/registration/Login.jsx";
 import InformationCompletion from "./routes/information completion/InformationCompletion.jsx";
 import ViewNewMarks from "./routes/marks/view-newMarks.jsx";
+import Verification from "./routes/verification/Verification.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
       {
         path: "information-completion",
         element: <InformationCompletion />,
+      },
+      {
+        path: "verification",
+        element: <Verification />,
       },
       {
         path: "marks",

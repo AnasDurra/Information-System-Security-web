@@ -299,7 +299,7 @@ const InformationCompletion = () => {
                       message: "Please enter a valid address.",
                     },
                     {
-                      len: 3,
+                      min: 3,
                       message: "Please enter a valid address",
                     },
                   ]}

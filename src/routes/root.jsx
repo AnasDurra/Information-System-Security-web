@@ -1,17 +1,22 @@
 import React from "react";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 const { Header, Content, Footer } = Layout;
 const items = [
   {
-    key: "home",
+    key: "",
     label: "Home",
+  },
+  {
+    key: "information-completion",
+    label: "Information Completion",
   },
 ];
 const Root = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  const navigate = useNavigate();
   return (
     <div className="root">
       <Layout>
@@ -31,6 +36,7 @@ const Root = () => {
             mode="horizontal"
             defaultSelectedKeys={["home"]}
             items={items}
+            onClick={(value) => navigate(`${value.key}`)}
             style={{
               flex: 1,
               minWidth: 0,
