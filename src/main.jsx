@@ -12,6 +12,8 @@ import ViewNewMarks from "./routes/marks/view-newMarks.jsx";
 import ViewMarks from "./routes/marks/view-marks.jsx";
 import ViewNewDescription from "./routes/practical subjects desctiption submissions/view-newDescription.jsx";
 import ViewDescriptions from "./routes/practical subjects desctiption submissions/view-descriptions.jsx";
+import ViewLandingMarks from "./routes/marks/view-landing-marks.jsx";
+import ViewLandingDescriptions from "./routes/practical subjects desctiption submissions/view-landing-descriptions.jsx";
 
 export const router = createBrowserRouter([
     {
@@ -22,6 +24,10 @@ export const router = createBrowserRouter([
             {
                 path: "marks",
                 children: [
+                    {
+                        index: true,
+                        element: <ViewLandingMarks/>
+                    },
                     {
                         path: 'new',
                         element: <ViewNewMarks/>
@@ -35,6 +41,10 @@ export const router = createBrowserRouter([
             {
                 path: "descriptions",
                 children: [
+                    {
+                        index: true,
+                        element: <ViewLandingDescriptions/>
+                    },
                     {
                         path: 'new',
                         element: <ViewNewDescription/>
@@ -63,7 +73,18 @@ export const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <ConfigProvider>
+    <ConfigProvider
+        theme={{
+            token: {
+                colorPrimary: '#00474f',
+                components: {
+                    Layout: {
+                        //  headerBg: '#f6ffed',
+                    },
+                },
+            },
+        }}
+    >
         <RouterProvider router={router}/>
     </ConfigProvider>
 );

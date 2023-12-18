@@ -2,7 +2,7 @@ import React from 'react';
 import {Col, Row} from "antd";
 import {useNavigate} from "react-router-dom";
 
-function ViewLandingMarks(props) {
+function ViewLandingDescriptions(props) {
     const navigate = useNavigate()
     return (
         <div style={{
@@ -19,7 +19,7 @@ function ViewLandingMarks(props) {
                         style={cardStyle}
                         onClick={() => navigate('view')}
                     >
-                        <p style={{margin: 0}}>View Subject Marks</p>
+                        <p style={{margin: 0}}>View Subject Descriptions</p>
                     </div>
                 </Col>
                 <Col span={8}>
@@ -27,7 +27,7 @@ function ViewLandingMarks(props) {
                         style={cardStyle}
                         onClick={() => navigate('new')}
                     >
-                        <p style={{margin: 0}}>New Marks List</p>
+                        <p style={{margin: 0}}>New Description</p>
                     </div>
                 </Col>
             </Row>
@@ -46,4 +46,5 @@ const cardStyle = {
     borderRadius: '8px',
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
 }
-export default ViewLandingMarks;
+
+export default ViewLandingDescriptions;
