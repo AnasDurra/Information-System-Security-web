@@ -41,10 +41,8 @@ const Root = () => {
           style={{
             backgroundColor: "#FCFDFB",
             borderRadius: borderRadiusLG,
-            marginTop: "15px",
             padding: "40px 48px",
             minHeight: "82vh",
-            marginTop: "0px",
           }}
         >
           <Outlet />
