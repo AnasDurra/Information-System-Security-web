@@ -8,7 +8,7 @@ function ViewMarks(props) {
             title: 'Marks For Subject X',
             children: [
                 {
-                    title: 'Name',
+                    title: 'Student Name',
                     dataIndex: 'name',
                     key: 'name',
                     width: "30%",
