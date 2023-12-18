@@ -1,5 +1,5 @@
 import React from "react";
-import { Breadcrumb, Layout, Menu } from "antd";
+import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { Outlet } from "react-router-dom";
 const { Header, Content, Footer } = Layout;
 const items = [
@@ -9,8 +9,11 @@ const items = [
   },
 ];
 const Root = () => {
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
   return (
-    <div style={{}} className="root">
+    <div className="root">
       <Layout>
         <Header
           style={{
@@ -36,7 +39,12 @@ const Root = () => {
         </Header>
         <Content
           style={{
-            padding: "0 48px",
+            backgroundColor: "#FCFDFB",
+            borderRadius: borderRadiusLG,
+            marginTop: "15px",
+            padding: "40px 48px",
+            minHeight: "82vh",
+            marginTop: "0px",
           }}
         >
           <Outlet />
