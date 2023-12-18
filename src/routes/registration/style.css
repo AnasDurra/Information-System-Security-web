@@ -1,0 +1,14 @@
+
+.login-page-content{
+display: flex;
+justify-content: flex-start;
+align-items: center;
+}
+
+.login-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30em ;
+  margin-top: 5em;
+}
