@@ -262,7 +262,6 @@ const Register = () => {
                       backgroundColor: "#002147",
                     }}
                     block
-                    onClick={openNotification}
                     htmlType="submit"
                   >
                     Submit
