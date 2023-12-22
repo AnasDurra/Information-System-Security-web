@@ -193,7 +193,7 @@ const InformationCompletion = () => {
                   rules={[
                     {
                       required: true,
-                      message: "Please enter your national number",
+                      message: "Please enter your phone number",
                     },
                     {
                       pattern: /^09\d{8}$/,
@@ -307,7 +307,7 @@ const InformationCompletion = () => {
                   <Input
                     onChange={(e) => setAddress(e.target.value)}
                     style={{ width: "40%" }}
-                    placeholder="سرغايا - الشارع الغام - ريف دمشق - سوريا"
+                    placeholder="سرغايا - الشارع العام - ريف دمشق - سوريا"
                     prefix={<HomeTwoTone />}
                   />
                 </Form.Item>

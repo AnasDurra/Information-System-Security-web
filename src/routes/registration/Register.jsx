@@ -284,7 +284,10 @@ const Register = () => {
                       </span>
                       <span style={{ marginTop: "8px" }}>or</span>
                       <span style={{ marginLeft: "3px" }}>
-                        <Link to={"/information-completion"}>
+                        <Link
+                          to="/login"
+                          state={{ informationCompletion: true }}
+                        >
                           Complete your information now!
                         </Link>
                       </span>

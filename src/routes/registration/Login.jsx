@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   UserOutlined,
   LockOutlined,
@@ -17,7 +17,7 @@ import {
   message,
 } from "antd";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./style.css";
 
 import LoginImage from "../../assets/account.png";
@@ -27,6 +27,17 @@ const Login = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [formDisabled, setFormDisabled] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { informationCompletion } = location.state || {};
+
+  useEffect(() => {
+    if (informationCompletion) {
+      messageApi.open({
+        type: "info",
+        content: "You need to sign in or sign up before continuing !",
+      });
+    }
+  }, [informationCompletion]);
 
   const success = () => {
     messageApi.open({
@@ -50,6 +61,11 @@ const Login = () => {
   };
 
   const onFinish = async (values) => {
+    if (informationCompletion) {
+      navigate("/information-completion");
+    } else {
+      navigate("/");
+    }
     // try {
     //   const result = await loginMutation(values);
     //   if (result.error) {
