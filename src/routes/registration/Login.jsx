@@ -35,7 +35,7 @@ const Login = () => {
     if (informationCompletion == "true") {
       messageApi.open({
         type: "info",
-        content: "You need to sign in or sign up before continuing !",
+        content: "You need to sign in or sign up before continuing!",
       });
     }
   }, [informationCompletion]);

@@ -29,7 +29,7 @@ const Verification = () => {
   };
 
   const generateRandomOperation = () => {
-    const operations = ["+", "-", "*", "/"];
+    const operations = ["+", "-", "*"];
     const randomIndex = Math.floor(Math.random() * operations.length);
     return operations[randomIndex];
   };
@@ -51,9 +51,6 @@ const Verification = () => {
         break;
       case "*":
         calculatedResult = number1 * number2;
-        break;
-      case "/":
-        calculatedResult = number1 / number2;
         break;
       default:
         calculatedResult = "Error";
@@ -118,6 +115,7 @@ const Verification = () => {
                     value={userAnswer}
                     // disabled = {isLoading}
                     onChange={(e) => setUserAnswer(e.target.value)}
+                    onPressEnter={checkAnswer}
                     placeholder="Enter your answer"
                   />
                   <Button
