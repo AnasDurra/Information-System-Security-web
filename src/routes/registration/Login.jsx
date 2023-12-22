@@ -21,17 +21,18 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./style.css";
 
 import LoginImage from "../../assets/account.png";
-// import cloudImage from "../../assets/login.png";
 const Login = () => {
   //   const [loginMutation, { isLoading, isError, error }] = useLoginMutation();
   const [messageApi, contextHolder] = message.useMessage();
   const [formDisabled, setFormDisabled] = useState(false);
   const navigate = useNavigate();
+
   const location = useLocation();
-  const { informationCompletion } = location.state || {};
+  const params = new URLSearchParams(location.search);
+  const informationCompletion = params.get("informationCompletion");
 
   useEffect(() => {
-    if (informationCompletion) {
+    if (informationCompletion == "true") {
       messageApi.open({
         type: "info",
         content: "You need to sign in or sign up before continuing !",
@@ -61,7 +62,7 @@ const Login = () => {
   };
 
   const onFinish = async (values) => {
-    if (informationCompletion) {
+    if (informationCompletion == "true") {
       navigate("/information-completion");
     } else {
       navigate("/");
