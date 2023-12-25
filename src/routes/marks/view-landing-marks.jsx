@@ -31,7 +31,6 @@ function ViewLandingMarks(props) {
                     </div>
                 </Col>
             </Row>
-
         </div>
     );
 }
