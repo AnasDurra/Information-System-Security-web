@@ -1,16 +1,6 @@
-import {
-  Button,
-  Card,
-  Flex,
-  Input,
-  Result,
-  Row,
-  Spin,
-  Typography,
-  message,
-} from "antd";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Button, Card, Flex, Input, Result, Row, Spin, Typography, message } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Verification = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -29,7 +19,7 @@ const Verification = () => {
   };
 
   const generateRandomOperation = () => {
-    const operations = ["+", "-", "*"];
+    const operations = ['+', '-', '*'];
     const randomIndex = Math.floor(Math.random() * operations.length);
     return operations[randomIndex];
   };
@@ -43,17 +33,17 @@ const Verification = () => {
   useEffect(() => {
     let calculatedResult;
     switch (operation) {
-      case "+":
+      case '+':
         calculatedResult = number1 + number2;
         break;
-      case "-":
+      case '-':
         calculatedResult = number1 - number2;
         break;
-      case "*":
+      case '*':
         calculatedResult = number1 * number2;
         break;
       default:
-        calculatedResult = "Error";
+        calculatedResult = 'Error';
     }
 
     setResult(calculatedResult);
@@ -63,53 +53,51 @@ const Verification = () => {
     if (parseInt(userAnswer) === result) {
       setHasAnswered(true);
       messageApi.open({
-        type: "success",
-        content: "Your identity has been verified!",
+        type: 'success',
+        content: 'Your identity has been verified!',
       });
       setTimeout(() => {
-        navigate("/");
+        navigate('/');
       }, 2000);
     } else {
       messageApi.open({
-        type: "error",
-        content: "Wrong answer , please check your answer!",
+        type: 'error',
+        content: 'Wrong answer , please check your answer!',
       });
     }
   };
   return (
     <div
       style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "82vh",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '82vh',
       }}
     >
       {contextHolder}
-      <Card style={{ width: "70%" }}>
+      <Card style={{ width: '70%' }}>
         <div
           style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <Result
             // icon={isLoading && <Spin size="large"></Spin>}
-            status={hasAnswered ? "success" : "info"}
+            status={hasAnswered ? 'success' : 'info'}
             title="Please solve the following mathematical equation to verify your identity"
             extra={
               <div
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
                 }}
               >
-                <div style={{ width: "50%" }}>
-                  <Typography.Title
-                    level={2}
-                  >{`${number1} ${operation} ${number2} = ?`}</Typography.Title>
+                <div style={{ width: '50%' }}>
+                  <Typography.Title level={2}>{`${number1} ${operation} ${number2} = ?`}</Typography.Title>
 
                   <Input
                     value={userAnswer}
@@ -123,11 +111,11 @@ const Verification = () => {
                     onClick={checkAnswer}
                     // loading = {isLoading}
                     style={{
-                      margin: "20px 0px",
-                      fontSize: "18px",
-                      color: "white",
-                      paddingBottom: "30px",
-                      backgroundColor: "#002147",
+                      margin: '20px 0px',
+                      fontSize: '18px',
+                      color: 'white',
+                      paddingBottom: '30px',
+                      backgroundColor: '#002147',
                     }}
                   >
                     Check Answer

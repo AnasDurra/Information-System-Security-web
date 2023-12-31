@@ -1,14 +1,13 @@
-
-.login-page-content{
-display: flex;
-justify-content: flex-start;
-align-items: center;
+.login-page-content {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
-.login-form{
+.login-form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 30em ;
+  width: 30em;
   margin-top: 5em;
 }

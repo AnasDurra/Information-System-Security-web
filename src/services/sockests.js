@@ -1,36 +1,67 @@
 // socket.js
-import {io} from 'socket.io-client';
-import bcrypt from "bcryptjs";
-import {encrypt} from "./encryption.js";
+import { io } from 'socket.io-client';
+import bcrypt from 'bcryptjs';
+import { encrypt, generateRSAKeyPair, signData } from './encryption.js';
 
-//const {token} = useAuth();
+const URL = 'https://university-server-backend-service.onrender.com';
 
-// Use the token when creating socket connections
-export const authSocket = io('http://localhost:3000/auth', {
-    autoConnect: false,
+export const authSocket = io(URL + '/auth', {
+  autoConnect: false,
 });
 export const authSocketLogin = (data) => {
-    authSocket.emit('login', data);
-}
+  authSocket.emit('login', data);
+};
 export const authSocketRegisterProfessor = (data) => {
-    authSocket.emit('registerProfessor', data);
+  authSocket.emit('registerProfessor', data);
 };
 
 export const authSocketRegisterStudent = (data) => {
-    authSocket.emit('registerStudent', data);
+  authSocket.emit('registerStudent', data);
 };
 
-
-export const completeInfoSocket = io('http://localhost:3000/complete', {
-    autoConnect: false,
+export const completeInfoSocket = io(URL + '/complete', {
+  autoConnect: false,
 });
-export const completeInfoSocketRequest = async (data, password) => {
-    const base64_data = btoa(JSON.stringify(data).toString());
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const iv = btoa(String.fromCharCode.apply(null, window.crypto.getRandomValues(new Uint8Array(16))))
-    const encryptedData = encrypt(JSON.stringify(data), password, iv);
+export const completeInfoSocketRequest = async (data, password, access_token) => {
+  const base64_data = btoa(JSON.stringify(data).toString());
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const iv = generateIV(32);
+  const encryptedData = encrypt(base64_data, hashedPassword, iv);
+  
+  completeInfoSocket.emit('completeInfo', { data: encryptedData, iv, access_token });
+};
 
-    completeInfoSocket.emit("completeInfo", {data: encryptedData, iv});
+export const marksSocket = io(URL + '/marks', {
+  autoConnect: false,
+});
+export const marksSocketAdd = (data) => {
+  const base64_data = btoa(JSON.stringify(data).toString());
+  //TODO get the session key from cookies
+  const sessionKey = 'whateva5000';
+  const iv = generateIV(32);
+
+  const { privateKey, publicKeyPem } = generateRSAKeyPair();
+  const signature = signData(base64_data, privateKey);
+
+  const encryptedData = encrypt(base64_data, sessionKey, iv);
+
+  const msg = {
+    signature: signature,
+    pub_key: publicKeyPem,
+    iv: iv,
+    data: encryptedData,
+  };
+
+  marksSocket.emit('addMarks', msg);
+};
+
+function generateIV(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters.charAt(randomIndex);
+  }
+  return result;
 }
-
-
