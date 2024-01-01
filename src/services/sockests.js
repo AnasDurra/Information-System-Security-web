@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import { encrypt, generateRSAKeyPair, signData } from './encryption.js';
 
 const URL = 'https://university-server-backend-service.onrender.com';
+//const URL = 'http://localhost:3000';
 
 export const authSocket = io(URL + '/auth', {
   autoConnect: false,
@@ -24,17 +25,18 @@ export const completeInfoSocket = io(URL + '/complete', {
 });
 export const completeInfoSocketRequest = async (data, password, access_token) => {
   const base64_data = btoa(JSON.stringify(data).toString());
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const salt = '$2a$10$zIGEx6kcy6xrD0/fpgjqz.';
+  const hashedPassword = await bcrypt.hash(password, salt);
   const iv = generateIV(32);
   const encryptedData = encrypt(base64_data, hashedPassword, iv);
-  
+
   completeInfoSocket.emit('completeInfo', { data: encryptedData, iv, access_token });
 };
 
 export const marksSocket = io(URL + '/marks', {
   autoConnect: false,
 });
-export const marksSocketAdd = (data) => {
+export const marksSocketAdd = (data, access_token) => {
   const base64_data = btoa(JSON.stringify(data).toString());
   //TODO get the session key from cookies
   const sessionKey = 'whateva5000';
@@ -50,6 +52,7 @@ export const marksSocketAdd = (data) => {
     pub_key: publicKeyPem,
     iv: iv,
     data: encryptedData,
+    token: access_token,
   };
 
   marksSocket.emit('addMarks', msg);

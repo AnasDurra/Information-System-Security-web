@@ -4,8 +4,11 @@ import { CloseOutlined } from '@ant-design/icons';
 import Title from 'antd/es/typography/Title.js';
 import FormItemLabel from 'antd/es/form/FormItemLabel.js';
 import { marksSocket, marksSocketAdd } from '../../services/sockests';
+import { useAuth } from '../../hooks/AuthContext';
 
 function ViewNewMarks(props) {
+  const { token: authToken } = useAuth();
+
   useEffect(() => {
     marksSocket.connect();
 
@@ -16,7 +19,7 @@ function ViewNewMarks(props) {
 
   const onfinish = (values) => {
     const formattedData = formatFormValues(values);
-    marksSocketAdd(formattedData);
+    marksSocketAdd(formattedData, authToken);
   };
 
   return (
