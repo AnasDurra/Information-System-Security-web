@@ -1,29 +1,38 @@
-import {HomeTwoTone, LockOutlined, MobileTwoTone,} from "@ant-design/icons";
-import {Breadcrumb, Button, Divider, Form, Input, Steps, theme, Typography,} from "antd";
-import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
-import {useAuth} from "../../hooks/AuthContext.jsx";
-import {completeInfoSocket, completeInfoSocketRequest} from "../../services/sockests.js";
-import {IoPersonOutline} from "react-icons/io5";
-
+import { HomeTwoTone, LockOutlined, MobileTwoTone } from "@ant-design/icons";
+import {
+    Breadcrumb,
+    Button,
+    Divider,
+    Form,
+    Input,
+    Steps,
+    theme,
+    Typography,
+} from "antd";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../hooks/AuthContext.jsx";
+import {
+    completeInfoSocket,
+    completeInfoSocketRequest,
+} from "../../services/sockests.js";
+import { IoPersonOutline } from "react-icons/io5";
 
 const InformationCompletion = () => {
     const [form] = Form.useForm();
 
-
-    const {token} = theme.useToken();
+    const { token } = theme.useToken();
     const [current, setCurrent] = useState(0);
 
-
-    const {token: authToken} = useAuth()
+    const { token: authToken } = useAuth();
 
     useEffect(() => {
-        console.log("auth", authToken)
+        console.log("auth", authToken);
         completeInfoSocket.auth = {
             ...completeInfoSocket.auth,
             auth: `Bearer ${authToken}`,
         };
-        console.log(completeInfoSocket)
+        console.log(completeInfoSocket);
 
         completeInfoSocket.connect();
 
@@ -40,11 +49,14 @@ const InformationCompletion = () => {
         if (current === steps.length - 1) {
             console.log(form.getFieldsValue(true) || "duh");
 
-            completeInfoSocketRequest({
-                ...form.getFieldsValue(true),
-                password: undefined
-            }, form.getFieldValue(['password']));
-
+            completeInfoSocketRequest(
+                {
+                    ...form.getFieldsValue(true),
+                    password: undefined,
+                },
+                form.getFieldValue(["password"])
+            );
+            console.log("finish");
         } else {
             setCurrent(current + 1);
         }
@@ -73,7 +85,7 @@ const InformationCompletion = () => {
                     },
                 ]}
             />
-            <Divider/>
+            <Divider />
             <Typography.Title
                 level={5}
                 style={{
@@ -83,31 +95,30 @@ const InformationCompletion = () => {
                 }}
             >
                 Please provide the required details to help us serve you better.
-                <br/>
-                <span style={{display: "block"}}>
-          Fields marked with <span style={{color: "red"}}>(*)</span> are
-          mandatory.
-        </span>
+                <br />
+                <span style={{ display: "block" }}>
+                    Fields marked with <span style={{ color: "red" }}>(*)</span>{" "}
+                    are mandatory.
+                </span>
             </Typography.Title>
 
             <Form onFinish={onFinish} form={form}>
                 <Steps
                     percent={current === 0 ? 0 : current === 1 ? 50 : 75}
-                    style={{margin: "30px 0px"}}
+                    style={{ margin: "30px 0px" }}
                     current={current}
                     items={items}
                 />
                 <div>
                     {current === 0 && (
                         <div>
-
                             <div style={contentStyle}>
                                 <Form.Item
-                                    style={{margin: "15px 0px"}}
+                                    style={{ margin: "15px 0px" }}
                                     name={"name"}
                                     label={
                                         <span>
-                                           <IoPersonOutline/>
+                                            <IoPersonOutline />
                                             &nbsp; full name
                                         </span>
                                     }
@@ -118,9 +129,9 @@ const InformationCompletion = () => {
                                     ]}
                                 >
                                     <Input
-                                        style={{width: "40%"}}
+                                        style={{ width: "40%" }}
                                         placeholder="full name"
-                                        prefix={<IoPersonOutline/>}
+                                        prefix={<IoPersonOutline />}
                                     />
                                 </Form.Item>
                             </div>
@@ -168,18 +179,19 @@ const InformationCompletion = () => {
                         <div>
                             <div style={contentStyle}>
                                 <Form.Item
-                                    style={{margin: "15px 0px"}}
+                                    style={{ margin: "15px 0px" }}
                                     name={"phone_number"}
                                     label={
                                         <span>
-                                              <MobileTwoTone/>
+                                            <MobileTwoTone />
                                             &nbsp; Mobile Phone Number
-                                       </span>
+                                        </span>
                                     }
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Please enter your phone number",
+                                            message:
+                                                "Please enter your phone number",
                                         },
                                         {
                                             pattern: /^09\d{8}$/,
@@ -189,9 +201,9 @@ const InformationCompletion = () => {
                                     ]}
                                 >
                                     <Input
-                                        style={{width: "40%"}}
+                                        style={{ width: "40%" }}
                                         placeholder="09xxxxxxxx"
-                                        prefix={<MobileTwoTone/>}
+                                        prefix={<MobileTwoTone />}
                                     />
                                 </Form.Item>
                             </div>
@@ -238,42 +250,45 @@ const InformationCompletion = () => {
                         <div>
                             <div style={contentStyle}>
                                 <Form.Item
-                                    style={{margin: "15px 0px"}}
+                                    style={{ margin: "15px 0px" }}
                                     name={"address"}
                                     label={
                                         <span>
-                                             <HomeTwoTone/>
+                                            <HomeTwoTone />
                                             &nbsp; Address
-                                         </span>
+                                        </span>
                                     }
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Please enter your address",
+                                            message:
+                                                "Please enter your address",
                                         },
                                         {
                                             pattern: /^[a-zA-Z0-9\s,'-.#]+$/,
-                                            message: "Please enter a valid address.",
+                                            message:
+                                                "Please enter a valid address.",
                                         },
                                         {
                                             min: 3,
-                                            message: "Please enter a valid address",
+                                            message:
+                                                "Please enter a valid address",
                                         },
                                     ]}
                                 >
                                     <Input
-                                        style={{width: "40%"}}
+                                        style={{ width: "40%" }}
                                         placeholder="سرغايا - الشارع العام - ريف دمشق - سوريا"
                                     />
                                 </Form.Item>
 
                                 <Form.Item
-                                    style={{margin: "15px 0px"}}
+                                    style={{ margin: "15px 0px" }}
                                     name={"password"}
                                     label={
                                         <span>
-                                              <LockOutlined/>
-                                            &nbsp;  Password
+                                            <LockOutlined />
+                                            &nbsp; Password
                                         </span>
                                     }
                                     rules={[
@@ -283,7 +298,7 @@ const InformationCompletion = () => {
                                     ]}
                                 >
                                     <Input
-                                        style={{width: "40%"}}
+                                        style={{ width: "40%" }}
                                         placeholder="password"
                                     />
                                 </Form.Item>
@@ -328,7 +343,6 @@ const InformationCompletion = () => {
                     )}
                 </div>
             </Form>
-
         </div>
     );
 };
@@ -349,6 +363,5 @@ const items = steps.map((item) => ({
     key: item.title,
     title: item.title,
 }));
-
 
 export default InformationCompletion;

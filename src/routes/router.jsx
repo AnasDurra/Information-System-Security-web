@@ -1,4 +1,4 @@
-import {createBrowserRouter} from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import Root from "./root.jsx";
 import ErrorPage from "../error-page.jsx";
 import PrivateRoute from "./PrivateRoute.jsx";
@@ -17,63 +17,73 @@ import React from "react";
 export const router = createBrowserRouter([
     {
         path: "/",
-        element: <Root/>,
-        errorElement: <ErrorPage/>,
+        element: <Root />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 index: true,
-                element: <PrivateRoute component={<></>}/>
+                element: <PrivateRoute component={<></>} />,
             },
             {
                 path: "marks",
                 children: [
                     {
                         index: true,
-                        element: <PrivateRoute component={<ViewLandingMarks/>}/>
+                        element: (
+                            <PrivateRoute component={<ViewLandingMarks />} />
+                        ),
                     },
                     {
-                        path: 'new',
-                        element: <PrivateRoute component={<ViewNewMarks/>}/>
+                        path: "new",
+                        element: <PrivateRoute component={<ViewNewMarks />} />,
                     },
                     {
                         path: "view",
-                        element: <PrivateRoute component={<ViewMarks/>}/>
+                        element: <PrivateRoute component={<ViewMarks />} />,
                     },
-                ]
+                ],
             },
             {
                 path: "descriptions",
                 children: [
                     {
                         index: true,
-                        element: <PrivateRoute component={<ViewLandingDescriptions/>}/>
+                        element: (
+                            <PrivateRoute
+                                component={<ViewLandingDescriptions />}
+                            />
+                        ),
                     },
                     {
-                        path: 'new',
-                        element: <PrivateRoute component={<ViewNewDescription/>}/>
+                        path: "new",
+                        element: (
+                            <PrivateRoute component={<ViewNewDescription />} />
+                        ),
                     },
                     {
                         path: "view",
-                        element: <PrivateRoute component={<ViewDescriptions/>}/>
+                        element: (
+                            <PrivateRoute component={<ViewDescriptions />} />
+                        ),
                     },
-                ]
+                ],
             },
 
             {
                 path: "register",
-                element: <Register/>,
+                element: <Register />,
             },
             {
                 path: "login",
-                element: <Login/>,
+                element: <Login />,
             },
             {
                 path: "information-completion",
-                element: <PrivateRoute component={<InformationCompletion/>}/>
+                element: <PrivateRoute component={<InformationCompletion />} />,
             },
             {
                 path: "verification",
-                element: <Verification/>,
+                element: <Verification />,
             },
         ],
     },

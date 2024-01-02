@@ -1,14 +1,19 @@
-import React, {useEffect, useState} from "react";
-import {CheckCircleTwoTone, LockOutlined, LoginOutlined, OrderedListOutlined, UserOutlined,} from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import {
+    CheckCircleTwoTone,
+    LockOutlined,
+    LoginOutlined,
+    OrderedListOutlined,
+    UserOutlined,
+} from "@ant-design/icons";
 // import { useLoginMutation } from "../../app/services/auth";
-import {Button, Form, Image, Input, message, Typography,} from "antd";
-import {Link, useNavigate} from "react-router-dom";
+import { Button, Form, Image, Input, message, Typography } from "antd";
+import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
 import LoginImage from "../../assets/account.png";
-import {authSocket, authSocketLogin} from "../../services/sockests.js";
-import {useAuth} from "../../hooks/AuthContext.jsx";
+import { authSocket, authSocketLogin } from "../../services/sockests.js";
+import { useAuth } from "../../hooks/AuthContext.jsx";
 // import cloudImage from "../../assets/login.png";
-
 
 const Login = () => {
     //   const [loginMutation, { isLoading, isError, error }] = useLoginMutation();
@@ -16,8 +21,7 @@ const Login = () => {
     const [formDisabled, setFormDisabled] = useState(false);
     const navigate = useNavigate();
 
-    const {login} = useAuth()
-
+    const { login } = useAuth();
 
     const onFinish = async (values) => {
         const credentials = {
@@ -25,7 +29,7 @@ const Login = () => {
             password: values.password,
         };
 
-        authSocketLogin(credentials)
+        authSocketLogin(credentials);
     };
 
     useEffect(() => {
@@ -42,24 +46,30 @@ const Login = () => {
             <div className="login-page-content">
                 <Image
                     //   width={350}
-                    style={{marginTop: "60px", marginLeft: "80px", width: "60%"}}
+                    style={{
+                        marginTop: "60px",
+                        marginLeft: "80px",
+                        width: "60%",
+                    }}
                     preview={false}
                     src={LoginImage}
                 />
 
-                <div style={{marginLeft: "80px"}}>
+                <div style={{ marginLeft: "80px" }}>
                     <Form
                         className="login-form"
                         //   disabled={isLoading || formDisabled}
                         onFinish={onFinish}
                     >
                         {/* <Image preview={false} width={150} src={cloudImage}></Image> */}
-                        <Typography.Title level={2}>Welcome Back</Typography.Title>
+                        <Typography.Title level={2}>
+                            Welcome Back
+                        </Typography.Title>
                         <Typography.Paragraph>
                             Please sign in to continue.
                         </Typography.Paragraph>
                         <Form.Item
-                            style={{width: "100%", marginBottom: 15}}
+                            style={{ width: "100%", marginBottom: 15 }}
                             name={"username"}
                             rules={[
                                 {
@@ -74,12 +84,16 @@ const Login = () => {
                                     height: "40px",
                                 }}
                                 placeholder="Username"
-                                prefix={<UserOutlined style={{color: "rgba(0,0,0,.25)"}}/>}
+                                prefix={
+                                    <UserOutlined
+                                        style={{ color: "rgba(0,0,0,.25)" }}
+                                    />
+                                }
                             />
                         </Form.Item>
 
                         <Form.Item
-                            style={{width: "100%"}}
+                            style={{ width: "100%" }}
                             name={"password"}
                             rules={[
                                 {
@@ -94,11 +108,15 @@ const Login = () => {
                                     height: "40px",
                                 }}
                                 placeholder="passowrd"
-                                prefix={<LockOutlined style={{color: "rgba(0,0,0,.25)"}}/>}
+                                prefix={
+                                    <LockOutlined
+                                        style={{ color: "rgba(0,0,0,.25)" }}
+                                    />
+                                }
                             />
                         </Form.Item>
 
-                        <Form.Item style={{width: "100%", marginBottom: 15}}>
+                        <Form.Item style={{ width: "100%", marginBottom: 15 }}>
                             <Button
                                 style={{
                                     width: "100%",
@@ -108,7 +126,7 @@ const Login = () => {
                                     backgroundColor: "#002147",
                                 }}
                                 //   loading={isLoading}
-                                icon={<LoginOutlined/>}
+                                icon={<LoginOutlined />}
                                 className="custom-button"
                                 htmlType="submit"
                             >
@@ -123,9 +141,9 @@ const Login = () => {
                                 }}
                             >
                                 Don't have an account?
-                                <span style={{marginLeft: "3px"}}>
-                  <Link to={"/register"}> Signup now</Link>
-                </span>
+                                <span style={{ marginLeft: "3px" }}>
+                                    <Link to={"/register"}> Signup now</Link>
+                                </span>
                             </Typography.Text>
                         </Form.Item>
                     </Form>
@@ -151,11 +169,10 @@ const openNotification = (api) => {
     });
 };
 
-
 const success = (messageApi, message) => {
     messageApi.open({
         type: "success",
-        icon: <CheckCircleTwoTone twoToneColor="#52c41a"/>,
+        icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
         content: message ? message : "Login successfully",
     });
 };
