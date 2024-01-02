@@ -40,7 +40,11 @@ const Login = () => {
       <div className="login-page-content">
         <Image
           //   width={350}
-          style={{ marginTop: '60px', marginLeft: '80px', width: '60%' }}
+          style={{
+            marginTop: '60px',
+            marginLeft: '80px',
+            width: '60%',
+          }}
           preview={false}
           src={LoginImage}
         />
