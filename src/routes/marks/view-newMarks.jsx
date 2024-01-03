@@ -5,9 +5,25 @@ import Title from 'antd/es/typography/Title.js';
 import FormItemLabel from 'antd/es/form/FormItemLabel.js';
 import { marksSocket, marksSocketAdd } from '../../services/sockests';
 import { useAuth } from '../../hooks/AuthContext';
+import { getSocket, getSocketGetAllStudents, getSocketGetTeacherSubjects } from '../../services/retrieveSocket';
+import { useSubjects } from '../../hooks/SubjectsContext';
+import { useStudents } from '../../hooks/StudentsContext';
 
 function ViewNewMarks(props) {
   const { token: authToken } = useAuth();
+  const { subjects } = useSubjects();
+  const { students } = useStudents();
+
+  useEffect(() => {
+    getSocket.connect();
+
+    getSocketGetTeacherSubjects(authToken);
+    getSocketGetAllStudents(authToken);
+
+    return () => {
+      getSocket.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     marksSocket.connect();

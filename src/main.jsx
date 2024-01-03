@@ -5,6 +5,9 @@ import { AuthProvider } from './hooks/AuthContext.jsx';
 import { ConfigProvider } from 'antd';
 import { router } from './routes/router.jsx';
 import { RouterProvider } from 'react-router-dom';
+import { StudentProvider } from './hooks/StudentsContext.jsx';
+import { SubjectProvider } from './hooks/SubjectsContext.jsx';
+import { DescriptionProvider } from './hooks/DescriptionsContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ConfigProvider
@@ -20,7 +23,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     }}
   >
     <AuthProvider>
-      <RouterProvider router={router} />
+      <StudentProvider>
+        <SubjectProvider>
+          <DescriptionProvider>
+            <RouterProvider router={router} />
+          </DescriptionProvider>
+        </SubjectProvider>
+      </StudentProvider>
     </AuthProvider>
   </ConfigProvider>
 );

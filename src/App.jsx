@@ -14,6 +14,7 @@ import {
 import generateKeyPairs from './services/keys.js';
 import Cookies from 'js-cookie';
 import { hash } from 'bcryptjs';
+import { decrypt } from './services/encryption.js';
 
 // Importing the v4 function from the uuid library
 // import { v4 as uuidv4 } from "uuid";
@@ -143,6 +144,10 @@ function App() {
 
     function onCompleteInfoResult(msg) {
       console.log('Received message from server:', msg);
+
+      const sessionKey = Cookies.get('sessionKey');
+      console.log('sessionKey', sessionKey);
+      if (msg.data && msg.iv && sessionKey) console.log('decrypt: ', decrypt(msg.data, sessionKey, msg.iv));
 
       const privateKey = Cookies.get('privateKey');
       const publicKey = Cookies.get('publicKey');
