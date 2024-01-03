@@ -8,6 +8,7 @@ import { RouterProvider } from 'react-router-dom';
 import { StudentProvider } from './hooks/StudentsContext.jsx';
 import { SubjectProvider } from './hooks/SubjectsContext.jsx';
 import { DescriptionProvider } from './hooks/DescriptionsContext.jsx';
+import { CertificateProvider } from './hooks/CertificateContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ConfigProvider
@@ -26,7 +27,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <StudentProvider>
         <SubjectProvider>
           <DescriptionProvider>
-            <RouterProvider router={router} />
+            <CertificateProvider>
+              <RouterProvider router={router} />
+            </CertificateProvider>
           </DescriptionProvider>
         </SubjectProvider>
       </StudentProvider>

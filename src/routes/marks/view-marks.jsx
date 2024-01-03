@@ -2,12 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { Select, Table } from 'antd';
 import Title from 'antd/es/skeleton/Title';
 import { useAuth } from '../../hooks/AuthContext';
-import { getSocket, marksSocket, requestGetTeacherSubjects } from '../../services/sockests';
+import {
+  getMarksViaCertificate,
+  getSocket,
+  marksSocket,
+  requestGetTeacherSubjects,
+  setMarksSocketHeader,
+} from '../../services/sockests';
+import { useCertificate } from '../../hooks/CertificateContext';
+import { decrypt } from '../../services/encryption';
+import Cookies from 'js-cookie';
 
 function ViewMarks(props) {
   const { token: authToken } = useAuth();
+  const { certificate } = useCertificate();
+
+  const sessionKey = '$2b$10$W9G6eR5e41VlIjM8i09uReKVlg6jJ8p5/nXu3rDEKCxf2dK5cf.M.';
 
   const [options, setOptions] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState(null);
   const columns = [
     {
       title: 'Marks For Subject Xx',
@@ -40,20 +53,48 @@ function ViewMarks(props) {
     },
   ];
   useEffect(() => {
-    if (!marksSocket.connect()) {
-      marksSocket.connect();
-    }
+    console.log(certificate);
+    setMarksSocketHeader({
+      certificate: btoa(JSON.stringify(certificate).toString()),
+    });
+    marksSocket.connect();
+
     getSocket.connect();
 
-    console.log(authToken);
     requestGetTeacherSubjects({ access_token: authToken });
 
     getSocket.on('result', requestGetTeacherSubjectsResult);
+    marksSocket.on('getMarksViaCertificateResult', getMarksViaCertificateResult);
+
+    function getMarksViaCertificateResult(msg) {
+      console.log(msg);
+
+      console.log('temp session', sessionKey);
+      if (msg.status === 200) {
+        let data = decrypt(msg.data.data, sessionKey, msg.data.iv);
+        // JSON.parse(atob(data));
+      }
+    }
 
     function requestGetTeacherSubjectsResult(msg) {
-      console.log(msg);
+      const data = [];
+      for (let i = 0; i < msg.length; i++) {
+        const obj = {
+          label: msg[i].subject.name,
+          value: msg[i].subject.id,
+        };
+        data.push(obj);
+      }
+      setOptions(data);
     }
-  }, []);
+
+    if (selectedSubject) {
+      console.log(selectedSubject);
+      getMarksViaCertificate({
+        subject_id: selectedSubject,
+      });
+    }
+  }, [selectedSubject]);
 
   return (
     <div
@@ -70,7 +111,13 @@ function ViewMarks(props) {
         Subject
       </Title>
 
-      <Select style={{ width: '50%' }} placeholder="Select Subject" />
+      <Select
+        style={{ width: '50%' }}
+        placeholder="Select Subject"
+        options={options}
+        value={selectedSubject}
+        onChange={(id) => setSelectedSubject(id)}
+      />
 
       <Table style={{ marginTop: '1em', width: '50%' }} columns={columns} dataSource={data} pagination={false} />
     </div>

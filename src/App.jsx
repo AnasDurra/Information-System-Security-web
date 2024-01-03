@@ -23,6 +23,7 @@ import { Spin } from 'antd';
 import { useStudents } from './hooks/StudentsContext.jsx';
 import { useSubjects } from './hooks/SubjectsContext.jsx';
 import { useDescriptions } from './hooks/DescriptionsContext.jsx';
+import { useCertificate } from './hooks/CertificateContext.jsx';
 
 // Importing the v4 function from the uuid library
 // import { v4 as uuidv4 } from "uuid";
@@ -33,12 +34,13 @@ function App() {
   const { students, setAllStudents } = useStudents();
   const { subjects, setAllSubjects } = useSubjects();
   const { descriptions, setAllDescriptions } = useDescriptions();
+  const { certificate, setCertificate } = useCertificate();
 
   const [user, setUser] = useState(null);
   const [showVerification, setShowVerification] = useState(false);
   const [equation, setEquation] = useState('');
   const [hasVerified, setHasVerified] = useState(false);
-  const [certificate, setCertificate] = useState(null);
+  // const [certificate, setCertificate] = useState(null);
 
   const [doneHandShaking, setDoneHandShaking] = useState(true);
   const navigate = useNavigate();
@@ -205,7 +207,7 @@ function App() {
       if (msg.status >= 400 && msg.status < 500) console.log('REGISTER REJECTED');
       else if (msg.status >= 200 && msg.status < 300) {
         console.log('REGISTER ACCEPTED');
-
+        setUser(msg.data);
         login(msg.data.access_token);
 
         navigate('/');

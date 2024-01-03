@@ -64,6 +64,7 @@ function ViewNewDescription(props) {
         data.push(obj);
       }
       setOptions(data);
+      console.log(options);
     }
 
     return () => {

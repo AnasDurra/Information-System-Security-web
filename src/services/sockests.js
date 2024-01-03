@@ -38,9 +38,24 @@ export const completeInfoSocketRequest = async (data, password, access_token) =>
   completeInfoSocket.emit('completeInfo', { data: encryptedData, iv, access_token });
 };
 
-export const marksSocket = io(URL + '/marks', {
+export let marksSocket = io(URL + '/marks', {
   autoConnect: false,
 });
+
+
+// Function to reinitialize the socket
+export const setMarksSocketHeader = (headers) => {
+  // Close the existing socket connection if it's open
+  if (setMarksSocketHeader.connected) {
+    setMarksSocketHeader.disconnect();
+  }
+
+  // Create a new socket instance with updated headers
+  marksSocket = io(URL + '/marks', {
+    autoConnect: false,
+    extraHeaders: headers,
+  });
+};
 
 export const marksSocketAdd = (data, access_token) => {
   const base64_data = btoa(JSON.stringify(data).toString());
@@ -65,7 +80,8 @@ export const marksSocketAdd = (data, access_token) => {
 };
 
 export const getMarksViaCertificate = (data) => {
-  marksSocket.emit('addMarks', data);
+  console.log(data);
+  marksSocket.emit('getMarksViaCertificate', data);
 };
 
 export function generateIV(length) {
