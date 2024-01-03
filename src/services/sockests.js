@@ -9,22 +9,26 @@ const URL = 'https://university-server-backend-service.onrender.com';
 export const authSocket = io(URL + '/auth', {
   autoConnect: false,
 });
-export const authSocketLogin = (data) => {
-  authSocket.emit('login', data);
-};
-export const authSocketRegisterProfessor = (data) => {
-  authSocket.emit('registerProfessor', data);
+
+export const authSocketLogin = (credentials) => {
+  authSocket.emit('login', credentials);
 };
 
-export const authSocketRegisterStudent = (data) => {
-  authSocket.emit('registerStudent', data);
+export const authSocketRegisterProfessor = (credentials) => {
+  authSocket.emit('registerProfessor', credentials);
+};
+
+export const authSocketRegisterStudent = (credentials) => {
+  authSocket.emit('registerStudent', credentials);
 };
 
 export const completeInfoSocket = io(URL + '/complete', {
   autoConnect: false,
 });
+
 export const completeInfoSocketRequest = async (data, password, access_token) => {
   const base64_data = btoa(JSON.stringify(data).toString());
+
   const salt = '$2a$10$zIGEx6kcy6xrD0/fpgjqz.';
   const hashedPassword = await bcrypt.hash(password, salt);
   const iv = generateIV(32);
@@ -36,6 +40,7 @@ export const completeInfoSocketRequest = async (data, password, access_token) =>
 export const marksSocket = io(URL + '/marks', {
   autoConnect: false,
 });
+
 export const marksSocketAdd = (data, access_token) => {
   const base64_data = btoa(JSON.stringify(data).toString());
   //TODO get the session key from cookies

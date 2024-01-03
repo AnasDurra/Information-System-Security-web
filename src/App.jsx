@@ -19,6 +19,7 @@ function App() {
       else if (msg.status >= 200 && msg.status < 300) {
         console.log('LOGIN ACCEPTED');
 
+        //TODO encrypt
         login(msg.data.access_token);
 
         navigate('/', { replace: true });
@@ -39,6 +40,8 @@ function App() {
 
     function onCompleteInfoResult(msg) {
       console.log('Received message from server:', msg);
+
+      navigate('/', { replace: true });
     }
 
     function onAddMarksResult(msg) {

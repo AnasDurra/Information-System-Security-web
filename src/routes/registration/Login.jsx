@@ -17,7 +17,7 @@ const Login = () => {
 
   const { login } = useAuth();
 
-  const onFinish = async (values) => {
+  const onFinish = (values) => {
     const credentials = {
       username: values.username,
       password: values.password,
