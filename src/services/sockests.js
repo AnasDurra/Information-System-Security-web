@@ -68,7 +68,7 @@ export const getMarksViaCertificate = (data) => {
   marksSocket.emit('addMarks', data);
 };
 
-function generateIV(length) {
+export function generateIV(length) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
 
@@ -79,69 +79,81 @@ function generateIV(length) {
   return result;
 }
 
-
-export let handshakingSocket = io('https://university-server-backend-service.onrender.com/subjects', {
-    autoConnect: false,
+export let handshakingSocket = io(URL + '/subjects', {
+  autoConnect: false,
 });
 
 // Function to reinitialize the socket
 export const sethandshakingSocketHeader = (headers) => {
-    // Close the existing socket connection if it's open
-    if (handshakingSocket.connected) {
-      handshakingSocket.disconnect();
-    }
-  
-    // Create a new socket instance with updated headers
-    handshakingSocket = io('https://university-server-backend-service.onrender.com/subjects', {
-      autoConnect: false,
-      extraHeaders: headers,
-    });
-  };
+  // Close the existing socket connection if it's open
+  if (handshakingSocket.connected) {
+    handshakingSocket.disconnect();
+  }
+
+  // Create a new socket instance with updated headers
+  handshakingSocket = io(URL + '/subjects', {
+    autoConnect: false,
+    extraHeaders: headers,
+  });
+};
 export const responsePublicKeyExchange = async (data) => {
-    handshakingSocket.emit("responsePublicKeyExchange",data);
-    // console.log("done"); 
-}
+  handshakingSocket.emit('responsePublicKeyExchange', data);
+  // console.log("done");
+};
 
 export const requestSessionKeyExchange = async (data) => {
-    handshakingSocket.emit("requestSessionKeyExchange",data);
-    console.log("done"); 
-}
+  handshakingSocket.emit('requestSessionKeyExchange', data);
+  console.log('done');
+};
 
 export const requestGetAllSubjects = async () => {
-    handshakingSocket.emit("getAllSubjects");  
-}
+  handshakingSocket.emit('getAllSubjects');
+};
 
 export const requestSubmitProjects = async (data) => {
   const base64_data = btoa(JSON.stringify(data).toString());
   const iv = generateIV(32);
-  console.log("in socket",Cookies.get('sessionKey'));
+  console.log('in socket', Cookies.get('sessionKey'));
   const encryptedData = encrypt(base64_data, Cookies.get('sessionKey'), iv);
 
-  handshakingSocket.emit("submitProjects", {data: encryptedData, iv});
-}
+  handshakingSocket.emit('submitProjects', { data: encryptedData, iv });
+};
 
-
-
-export const authoritySocket = io('https://university-server-backend-service.onrender.com/authority', {
+export const authoritySocket = io(URL + '/authority', {
   autoConnect: false,
 });
 
 export const requestSignCertificate = async (data) => {
   // console.log(data);
-  authoritySocket.emit("signCertificate",data);
-}
+  authoritySocket.emit('signCertificate', data);
+};
 
 export const requestChallengeAswer = async (data) => {
   console.log(data);
-  authoritySocket.emit("challengeAnswer",data);
-}
+  authoritySocket.emit('challengeAnswer', data);
+};
 
-
-export const getSocket = io('https://university-server-backend-service.onrender.com/getSocket', {
+export const getSocket = io(URL + '/getSocket', {
   autoConnect: false,
 });
 
 export const requestGetTeacherSubjects = async (data) => {
   console.log(data);
-  getSocket.emit("getTeacherSubjects",data);
-}
+  getSocket.emit('getTeacherSubjects', data);
+};
+
+export const getSocketGetTeacherSubjects = (token) => {
+  getSocket.emit('getTeacherSubjects', { access_token: token });
+};
+
+export const getSocketGetAllStudents = (token) => {
+  getSocket.emit('getStudents', { access_token: token });
+};
+
+export const getSocketGetAllDescriptions = (token) => {
+  getSocket.emit('getAllDescriptions', token);
+};
+
+export const getSocketGetSubjectDescriptions = (token, subject_id) => {
+  getSocket.emit('getSubjectProjects', { access_token: token, subject_id });
+};

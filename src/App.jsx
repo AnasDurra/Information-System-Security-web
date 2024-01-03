@@ -12,6 +12,7 @@ import {
   marksSocket,
   authoritySocket,
   requestSignCertificate,
+  getSocket,
 } from './services/sockests.js';
 import generateKeyPairs from './services/keys.js';
 import Cookies from 'js-cookie';
@@ -19,6 +20,9 @@ import { hash } from 'bcryptjs';
 import { decrypt } from './services/encryption.js';
 import Verification from './routes/verification/Verification.jsx';
 import { Spin } from 'antd';
+import { useStudents } from './hooks/StudentsContext.jsx';
+import { useSubjects } from './hooks/SubjectsContext.jsx';
+import { useDescriptions } from './hooks/DescriptionsContext.jsx';
 
 // Importing the v4 function from the uuid library
 // import { v4 as uuidv4 } from "uuid";
@@ -26,6 +30,9 @@ import { Spin } from 'antd';
 
 function App() {
   const { login, token: authToken } = useAuth();
+  const { students, setAllStudents } = useStudents();
+  const { subjects, setAllSubjects } = useSubjects();
+  const { descriptions, setAllDescriptions } = useDescriptions();
 
   const [user, setUser] = useState(null);
   const [showVerification, setShowVerification] = useState(false);
@@ -140,10 +147,31 @@ function App() {
     };
     completeInfoSocket.connect();
 
+    return () => {
+      authoritySocket.off('challenge', onChallengeEvent);
+    };
+  }, [authToken, hasVerified]);
+
+  useEffect(() => {
+    getSocket.connect();
+
     authSocket.on('registrationResult', onRegistrationResultEvent);
     authSocket.on('loginResult', onLoginResultEvent);
     completeInfoSocket.on('completeInfoResult', onCompleteInfoResult);
     marksSocket.on('addMarksResult', onAddMarksResult);
+    getSocket.on('result', onGetTeacherSubjectsResult);
+    getSocket.on('getStudentsResponse', onGetStudentsResult);
+    getSocket.on('getSubjectProjectsResponse', onGetSubjectDescriptions);
+
+    async function handleKeys() {
+      try {
+        const { publicKey, privateKey } = await generateKeyPairs();
+        Cookies.set('publicKey', publicKey);
+        Cookies.set('privateKey', privateKey);
+      } catch (error) {
+        console.error('Error generating or setting keys:', error);
+      }
+    }
 
     function onLoginResultEvent(msg) {
       console.log(msg);
@@ -169,16 +197,6 @@ function App() {
         }
 
         navigate('/', { replace: true });
-      }
-    }
-
-    async function handleKeys() {
-      try {
-        const { publicKey, privateKey } = await generateKeyPairs();
-        Cookies.set('publicKey', publicKey);
-        Cookies.set('privateKey', privateKey);
-      } catch (error) {
-        console.error('Error generating or setting keys:', error);
       }
     }
 
@@ -216,15 +234,39 @@ function App() {
       console.log('Received message from server:', msg);
     }
 
+    function onGetTeacherSubjectsResult(msg) {
+      console.log('Received message from server:', msg);
+      if (msg.status >= 200 && msg.status < 300) {
+        setAllSubjects(msg.data);
+      }
+    }
+
+    function onGetStudentsResult(msg) {
+      console.log('Received message from server:', msg);
+      if (msg.status >= 200 && msg.status < 300) {
+        setAllStudents(msg.data);
+      }
+    }
+
+    function onGetSubjectDescriptions(msg) {
+      console.log('Received message from server:', msg);
+      if (msg.status >= 200 && msg.status < 300) {
+        setAllDescriptions(msg.data);
+      }
+    }
+
     return () => {
       authSocket.off('registrationResult', onRegistrationResultEvent);
       authSocket.off('loginResult', onLoginResultEvent);
-      authSocket.off('completeInfoResult', onLoginResultEvent);
-      authSocket.off('addMarksResult', onLoginResultEvent);
+      completeInfoSocket.off('completeInfoResult', onCompleteInfoResult);
+      marksSocket.off('addMarksResult', onAddMarksResult);
+      getSocket.off('result', onGetTeacherSubjectsResult);
+      getSocket.off('getStudentsResponse', onGetStudentsResult);
+      getSocket.off('getSubjectProjectsResponse', onGetSubjectDescriptions);
 
-      authoritySocket.off('challenge', onChallengeEvent);
+      getSocket.disconnect();
     };
-  }, [authToken, hasVerified]);
+  }, []);
 
   return (
     <>

@@ -3,35 +3,32 @@ import { Button, Col, Divider, Form, Input, InputNumber, Row, Select, Space } fr
 import { CloseOutlined } from '@ant-design/icons';
 import Title from 'antd/es/typography/Title.js';
 import FormItemLabel from 'antd/es/form/FormItemLabel.js';
-import { marksSocket, marksSocketAdd } from '../../services/sockests';
+import {
+  getSocket,
+  getSocketGetAllStudents,
+  getSocketGetTeacherSubjects,
+  marksSocket,
+  marksSocketAdd,
+} from '../../services/sockests';
 import { useAuth } from '../../hooks/AuthContext';
-import { getSocket, getSocketGetAllStudents, getSocketGetTeacherSubjects } from '../../services/retrieveSocket';
 import { useSubjects } from '../../hooks/SubjectsContext';
 import { useStudents } from '../../hooks/StudentsContext';
 
 function ViewNewMarks(props) {
   const { token: authToken } = useAuth();
-  const { subjects } = useSubjects();
+  const { subjects, setAllSubjects } = useSubjects();
   const { students } = useStudents();
 
   useEffect(() => {
-    getSocket.connect();
-
     getSocketGetTeacherSubjects(authToken);
     getSocketGetAllStudents(authToken);
-
-    return () => {
-      getSocket.disconnect();
-    };
   }, []);
 
   useEffect(() => {
     marksSocket.connect();
-    getSocket.connect();
 
     return () => {
       marksSocket.disconnect();
-      getSocket.disconnect();
     };
   }, []);
 
@@ -73,7 +70,9 @@ function ViewNewMarks(props) {
                 style={{
                   width: '20%',
                 }}
-                options={dummyOptions}
+                options={subjects?.map((sub) => {
+                  return { value: sub?.subject?.id, label: sub?.subject?.name };
+                })}
               />
             </Form.Item>
           </Col>
@@ -92,7 +91,13 @@ function ViewNewMarks(props) {
                       <Row key={field.key} style={{ width: '100%', marginTop: '1em' }} justify={'start'}>
                         <Col span={10}>
                           <Form.Item style={{ width: '100%' }} noStyle name={[field.name, 'student_id']}>
-                            <Select style={{ width: '100%' }} placeholder="Student" options={dummyOptions} />
+                            <Select
+                              style={{ width: '100%' }}
+                              placeholder="Student"
+                              options={students.map((stud) => {
+                                return { value: stud.id, label: stud.name };
+                              })}
+                            />
                           </Form.Item>
                         </Col>
                         <Col offset={2} span={10}>
