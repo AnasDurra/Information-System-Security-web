@@ -1,70 +1,62 @@
 import { Button, Card, Flex, Input, Result, Row, Spin, Typography, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authoritySocket, requestChallengeAswer } from '../../services/sockests';
 
-const Verification = () => {
-  const [messageApi, contextHolder] = message.useMessage();
-  const navigate = useNavigate();
-
+const Verification = ({ equation }) => {
+  console.log(equation);
+  console.log(eval(equation));
   const [userAnswer, setUserAnswer] = useState(null);
-  const [number1, setNumber1] = useState(null);
-  const [number2, setNumber2] = useState(null);
-  const [operation, setOperation] = useState(null);
   const [result, setResult] = useState(null);
+  const [messageApi, contextHolder] = message.useMessage();
+  // const navigate = useNavigate();
 
   const [hasAnswered, setHasAnswered] = useState(false);
 
-  const generateRandomNumber = () => {
-    return Math.floor(Math.random() * 10) + 1;
-  };
-
-  const generateRandomOperation = () => {
-    const operations = ['+', '-', '*'];
-    const randomIndex = Math.floor(Math.random() * operations.length);
-    return operations[randomIndex];
-  };
-
-  if (number1 === null) {
-    setNumber1(generateRandomNumber());
-    setNumber2(generateRandomNumber());
-    setOperation(generateRandomOperation());
-  }
-
   useEffect(() => {
-    let calculatedResult;
-    switch (operation) {
-      case '+':
-        calculatedResult = number1 + number2;
-        break;
-      case '-':
-        calculatedResult = number1 - number2;
-        break;
-      case '*':
-        calculatedResult = number1 * number2;
-        break;
-      default:
-        calculatedResult = 'Error';
+    setResult(eval(equation));
+    authoritySocket.on('certificate', onCertificateResult);
+
+    function onCertificateResult(msg) {
+      if (msg.status === 200) {
+        setHasAnswered(true);
+        messageApi.open({
+          type: 'success',
+          content: 'Your identity has been verified!',
+        });
+      }
     }
 
-    setResult(calculatedResult);
-  }, [number1, number2, operation]);
+    return () => {
+      authoritySocket.off('certificate', onCertificateResult);
+    };
+  }, []);
 
-  const checkAnswer = () => {
+  const onClick = () => {
+    console.log(parseInt(userAnswer), result);
     if (parseInt(userAnswer) === result) {
-      setHasAnswered(true);
-      messageApi.open({
-        type: 'success',
-        content: 'Your identity has been verified!',
-      });
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
+      requestChallengeAswer({ answer: parseInt(userAnswer) });
     } else {
       messageApi.open({
         type: 'error',
         content: 'Wrong answer , please check your answer!',
       });
     }
+    // if (parseInt(userAnswer) === result) {
+    //   setHasAnswered(true);
+    //   messageApi.open({
+    //     type: 'success',
+    //     content: 'Your identity has been verified!',
+    //   });
+    //   setTimeout(() => {
+    //     navigate('/');
+    //   }, 2000);
+    // } else {
+    //   messageApi.open({
+    //     type: 'error',
+    //     content: 'Wrong answer , please check your answer!',
+    //   });
+    // }
   };
   return (
     <div
@@ -97,18 +89,18 @@ const Verification = () => {
                 }}
               >
                 <div style={{ width: '50%' }}>
-                  <Typography.Title level={2}>{`${number1} ${operation} ${number2} = ?`}</Typography.Title>
+                  <Typography.Title level={2}>{equation}</Typography.Title>
 
                   <Input
                     value={userAnswer}
                     // disabled = {isLoading}
                     onChange={(e) => setUserAnswer(e.target.value)}
-                    onPressEnter={checkAnswer}
+                    onPressEnter={onClick}
                     placeholder="Enter your answer"
                   />
                   <Button
                     type="primary"
-                    onClick={checkAnswer}
+                    onClick={onClick}
                     // loading = {isLoading}
                     style={{
                       margin: '20px 0px',

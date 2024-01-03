@@ -10,9 +10,22 @@ import forge from 'node-forge';
 import { useAuth } from '../../hooks/AuthContext.jsx';
 import { decrypt, encrypt } from '../../services/encryption.js';
 import Cookies from 'js-cookie';
+import { useSubjects } from '../../hooks/SubjectsContext.jsx';
+import { getSocket, getSocketGetTeacherSubjects } from '../../services/retrieveSocket.js';
 
 function ViewNewDescription(props) {
   const { token: authToken } = useAuth();
+  const { subjects } = useSubjects();
+
+  useEffect(() => {
+    getSocket.connect();
+
+    getSocketGetTeacherSubjects(authToken);
+
+    return () => {
+      getSocket.disconnect();
+    };
+  }, []);
 
   const [options, setOptions] = useState([]);
   useEffect(() => {

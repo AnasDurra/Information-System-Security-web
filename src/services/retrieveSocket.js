@@ -1,17 +1,19 @@
 import { io } from 'socket.io-client';
 
+//TODO global url
+const URL = 'https://university-server-backend-service.onrender.com';
 export const getSocket = io(URL + '/get', {
   autoConnect: false,
 });
 
 export const getSocketGetTeacherSubjects = (token) => {
-  completeInfoSocket.emit('getTeacherSubjects', token);
+  getSocket.emit('getTeacherSubjects', token);
 };
 
 export const getSocketGetAllStudents = (token) => {
-  completeInfoSocket.emit('getAllStudents', token);
+  getSocket.emit('getAllStudents', token);
 };
 
 export const getSocketGetAllDescriptions = (token) => {
-  completeInfoSocket.emit('getAllDescriptions', token);
+  getSocket.emit('getAllDescriptions', token);
 };
