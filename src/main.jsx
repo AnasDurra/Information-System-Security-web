@@ -5,6 +5,7 @@ import { AuthProvider } from './hooks/AuthContext.jsx';
 import { ConfigProvider } from 'antd';
 import { router } from './routes/router.jsx';
 import { RouterProvider } from 'react-router-dom';
+import { CertificateProvider } from './hooks/CertificateContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ConfigProvider
@@ -20,7 +21,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     }}
   >
     <AuthProvider>
-      <RouterProvider router={router} />
+      <CertificateProvider>
+        <RouterProvider router={router} />
+      </CertificateProvider>
     </AuthProvider>
   </ConfigProvider>
 );
