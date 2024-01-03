@@ -59,6 +59,10 @@ export const marksSocketAdd = (data, access_token) => {
   marksSocket.emit('addMarks', msg);
 };
 
+export const getMarksViaCertificate = (data) => {
+  marksSocket.emit('addMarks', data);
+};
+
 function generateIV(length) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
@@ -76,11 +80,7 @@ export let handshakingSocket = io('https://university-server-backend-service.onr
 });
 
 // Function to reinitialize the socket
-export const sethandshakingSocketHeader = (authToken) => {
-    const headers = {
-      Authorization: authToken,
-    };
-  
+export const sethandshakingSocketHeader = (headers) => {
     // Close the existing socket connection if it's open
     if (handshakingSocket.connected) {
       handshakingSocket.disconnect();
@@ -114,4 +114,29 @@ export const requestSubmitProjects = async (data) => {
 
   handshakingSocket.emit("submitProjects", {data: encryptedData, iv});
 }
-  
+
+
+
+export const authoritySocket = io('https://university-server-backend-service.onrender.com/authority', {
+  autoConnect: false,
+});
+
+export const requestSignCertificate = async (data) => {
+  // console.log(data);
+  authoritySocket.emit("signCertificate",data);
+}
+
+export const requestChallengeAswer = async (data) => {
+  console.log(data);
+  authoritySocket.emit("challengeAnswer",data);
+}
+
+
+export const getSocket = io('https://university-server-backend-service.onrender.com/getSocket', {
+  autoConnect: false,
+});
+
+export const requestGetTeacherSubjects = async (data) => {
+  console.log(data);
+  getSocket.emit("getTeacherSubjects",data);
+}

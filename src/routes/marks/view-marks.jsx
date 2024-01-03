@@ -1,10 +1,16 @@
-import React from 'react';
-import { Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Select, Table } from 'antd';
+import Title from 'antd/es/skeleton/Title';
+import { useAuth } from '../../hooks/AuthContext';
+import { getSocket, marksSocket, requestGetTeacherSubjects } from '../../services/sockests';
 
 function ViewMarks(props) {
+  const { token: authToken } = useAuth();
+
+  const [options, setOptions] = useState([]);
   const columns = [
     {
-      title: 'Marks For Subject X',
+      title: 'Marks For Subject Xx',
       children: [
         {
           title: 'Student Name',
@@ -33,6 +39,21 @@ function ViewMarks(props) {
       ],
     },
   ];
+  useEffect(() => {
+    if (!marksSocket.connect()) {
+      marksSocket.connect();
+    }
+    getSocket.connect();
+
+    console.log(authToken);
+    requestGetTeacherSubjects({ access_token: authToken });
+
+    getSocket.on('result', requestGetTeacherSubjectsResult);
+
+    function requestGetTeacherSubjectsResult(msg) {
+      console.log(msg);
+    }
+  }, []);
 
   return (
     <div
@@ -45,6 +66,12 @@ function ViewMarks(props) {
         height: '100%',
       }}
     >
+      <Title level={5} style={{ margin: '1rem 0' }}>
+        Subject
+      </Title>
+
+      <Select style={{ width: '50%' }} placeholder="Select Subject" />
+
       <Table style={{ marginTop: '1em', width: '50%' }} columns={columns} dataSource={data} pagination={false} />
     </div>
   );

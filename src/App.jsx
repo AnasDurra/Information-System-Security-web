@@ -10,11 +10,15 @@ import {
   responsePublicKeyExchange,
   sethandshakingSocketHeader,
   marksSocket,
+  authoritySocket,
+  requestSignCertificate,
 } from './services/sockests.js';
 import generateKeyPairs from './services/keys.js';
 import Cookies from 'js-cookie';
 import { hash } from 'bcryptjs';
 import { decrypt } from './services/encryption.js';
+import Verification from './routes/verification/Verification.jsx';
+import { Spin } from 'antd';
 
 // Importing the v4 function from the uuid library
 // import { v4 as uuidv4 } from "uuid";
@@ -22,7 +26,14 @@ import { decrypt } from './services/encryption.js';
 
 function App() {
   const { login, token: authToken } = useAuth();
-  // const [sessionKey, setSessionKey] = useState("");
+
+  const [user, setUser] = useState(null);
+  const [showVerification, setShowVerification] = useState(false);
+  const [equation, setEquation] = useState('');
+  const [hasVerified, setHasVerified] = useState(false);
+  const [certificate, setCertificate] = useState(null);
+
+  const [doneHandShaking, setDoneHandShaking] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,8 +41,28 @@ function App() {
       Cookies.remove('sessionKey');
       Cookies.remove('serverPublicKey');
 
-      sethandshakingSocketHeader(authToken);
-      handshakingSocket.connect();
+      if (!hasVerified) {
+        // Q5
+        authoritySocket.connect();
+        requestSignCertificate({
+          user_id: user.user_id,
+          role_id: user.role_id,
+          public_key: Cookies.get('publicKey'),
+        });
+        console.log(authoritySocket);
+      } else {
+        console.log('Verified');
+        sethandshakingSocketHeader({
+          Authorization: authToken,
+          certificate: btoa(JSON.stringify(certificate).toString()),
+        });
+        handshakingSocket.connect();
+        setDoneHandShaking(false);
+        // console.log(handshakingSocket);
+      }
+
+      authoritySocket.on('challenge', onChallengeEvent);
+      authoritySocket.on('certificate', onCertificateResult);
 
       handshakingSocket.on('handshakingResult', onCompleteHandshakingResult);
       handshakingSocket.on('requestPublicKeyExchange', onRequestPublicKeyExchange);
@@ -73,6 +104,7 @@ function App() {
 
       function onResponseSessionKeyExchangeResult(msg) {
         console.log('session key was exchanged successfully', msg);
+        setDoneHandShaking(true);
       }
 
       async function generateSessionKey() {
@@ -81,6 +113,24 @@ function App() {
         };
         // console.log("hashed", hash(JSON.stringify(data), 10));
         return await hash(JSON.stringify(data), 10);
+      }
+    }
+
+    // move them
+    function onChallengeEvent(msg) {
+      setEquation(msg.challenge);
+      setShowVerification(true);
+      // console.log('Challenge is :', msg);
+    }
+
+    function onCertificateResult(msg) {
+      if (msg.status === 200) {
+        setTimeout(() => {
+          setShowVerification(false);
+          setHasVerified(true);
+          setCertificate(msg.certificate);
+        }, 2000);
+        // console.log(msg.certificate);
       }
     }
 
@@ -96,8 +146,8 @@ function App() {
     marksSocket.on('addMarksResult', onAddMarksResult);
 
     function onLoginResultEvent(msg) {
-      // // TODO Delete this
-
+      console.log(msg);
+      setUser(msg.data);
       const privateKey = Cookies.get('privateKey');
       const publicKey = Cookies.get('publicKey');
 
@@ -169,10 +219,20 @@ function App() {
       authSocket.off('loginResult', onLoginResultEvent);
       authSocket.off('completeInfoResult', onLoginResultEvent);
       authSocket.off('addMarksResult', onLoginResultEvent);
-    };
-  }, [authToken]);
 
-  return <Outlet />;
+      authoritySocket.off('challenge', onChallengeEvent);
+    };
+  }, [authToken, hasVerified]);
+
+  return (
+    <>
+      <Spin spinning={!doneHandShaking}>
+        {showVerification && <Verification equation={equation} />}
+
+        {!showVerification && <Outlet />}
+      </Spin>
+    </>
+  );
 }
 
 export default App;
