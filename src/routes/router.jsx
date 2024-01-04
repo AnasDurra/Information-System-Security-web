@@ -13,6 +13,7 @@ import Login from './registration/Login.jsx';
 import InformationCompletion from './information completion/InformationCompletion.jsx';
 import Verification from './verification/Verification.jsx';
 import React from 'react';
+import Home from './home/home.jsx';
 
 export const router = createBrowserRouter([
   {
@@ -22,7 +23,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <PrivateRoute component={<></>} />,
+        element: <PrivateRoute component={<Home />} />,
       },
       {
         path: 'marks',

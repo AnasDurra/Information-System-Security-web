@@ -41,12 +41,6 @@ function ViewMarks(props) {
           key: 'mark',
           width: '20%',
         },
-        {
-          title: 'Submitted By',
-          dataIndex: 'submittedBy',
-          key: 'submittedBy',
-          width: '20%',
-        },
       ],
     },
   ];
