@@ -3,6 +3,7 @@ import { Button, Select, Table } from 'antd';
 import { FaDownload } from 'react-icons/fa';
 import Title from 'antd/es/typography/Title';
 import { getSocketGetTeacherSubjects } from '../../services/socket-get.js';
+import { getSocketGetTeacherSubjects } from '../../services/socket-get.js';
 import { useSubjects } from '../../hooks/SubjectsContext';
 import { useAuth } from '../../hooks/AuthContext';
 import { useDescriptions } from '../../hooks/DescriptionsContext';
