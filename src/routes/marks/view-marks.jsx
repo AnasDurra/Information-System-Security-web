@@ -5,15 +5,13 @@ import { useAuth } from '../../hooks/AuthContext';
 import { useCertificate } from '../../hooks/CertificateContext';
 import { decrypt } from '../../services/encryption';
 import Cookies from 'js-cookie';
-import {getMarksViaCertificate} from "../../services/socket-marks.js";
-import {getSocket,requestGetTeacherSubjects} from  '../../services/socket-get'
-import {marksSocket,setMarksSocketHeader} from  '../../services/socket-marks.js'
+import { getMarksViaCertificate } from '../../services/socket-marks.js';
+import { getSocket, requestGetTeacherSubjects } from '../../services/socket-get';
+import { marksSocket, setMarksSocketHeader } from '../../services/socket-marks.js';
 
 function ViewMarks(props) {
   const { token: authToken } = useAuth();
   const { certificate } = useCertificate();
-
-  const sessionKey = '$2b$10$W9G6eR5e41VlIjM8i09uReKVlg6jJ8p5/nXu3rDEKCxf2dK5cf.M.';
 
   const [options, setOptions] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
@@ -65,10 +63,11 @@ function ViewMarks(props) {
     function getMarksViaCertificateResult(msg) {
       console.log(msg);
 
-      console.log('temp session', sessionKey);
       if (msg.status === 200) {
-        let data = decrypt(msg.data.data, sessionKey, msg.data.iv);
-        // JSON.parse(atob(data));
+        console.log(Cookies.get('sessionKey'));
+        const data = decrypt(msg.data.data, Cookies.get('sessionKey'), msg.data.iv);
+        console.log(data);
+        // console.log(JSON.parse(atob(data)));
       }
     }
 
