@@ -41,7 +41,7 @@ function ViewNewDescription(props) {
       // 3. Parse data back from JSON
       const parsed = JSON.parse(jsonString);
       // 4.Print the output
-      const jsonData = JSON.stringify(data);
+      const jsonData = JSON.stringify(parsed);
 
       console.log(jsonData);
 
