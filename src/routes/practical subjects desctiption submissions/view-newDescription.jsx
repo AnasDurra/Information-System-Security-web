@@ -12,7 +12,7 @@ import { useSubjects } from '../../hooks/SubjectsContext.jsx';
 import { getSocketGetTeacherSubjects } from '../../services/socket-get.js';
 import { handshakingSocket, requestGetAllSubjects, requestSubmitProjects } from '../../services/socket-handshaking.js';
 
-function ViewNewDescription(props) {
+function ViewNewDescription() {
   const { token: authToken } = useAuth();
   const { subjects } = useSubjects();
 
@@ -29,7 +29,6 @@ function ViewNewDescription(props) {
 
     function onResponseGetAllSubjects(msg) {
       console.log(msg);
-      console.log(Cookies.get('sessionKey'));
 
       // DECODING
       // Prepare data
@@ -43,19 +42,17 @@ function ViewNewDescription(props) {
       // 4.Print the output
       const jsonData = JSON.stringify(parsed);
 
-      console.log(jsonData);
+      const data = [];
 
-      // const data = [];
-
-      // for (let i = 0; i <jsonData.length; i++) {
-      //   const obj = {
-      //     label: jsonData[i].name,
-      //     value: jsonData[i].id,
-      //   };
-      //   data.push(obj);
-      // }
-      // setOptions(data);
-      // console.log(options);
+      for (let i = 0; i < parsed.length; i++) {
+        const obj = {
+          label: parsed[i].name,
+          value: parsed[i].id,
+        };
+        data.push(obj);
+      }
+      setOptions(data);
+      console.log(data);
     }
 
     return () => {
@@ -82,7 +79,7 @@ function ViewNewDescription(props) {
           };
 
           requestSubmitProjects(data);
-          console.log('done');
+          console.log(data);
         }}
       >
         <div style={{ margin: '2em', width: '100%' }}>
