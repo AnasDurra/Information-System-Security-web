@@ -5,6 +5,10 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext.jsx';
 import { completeInfoSocket, completeInfoSocketRequest } from '../../services/socket-complete info.js';
 import { IoPersonOutline } from 'react-icons/io5';
+import { usePassword } from '../../hooks/passwordContext.jsx';
+import bcrypt from "bcryptjs";
+import Cookies from 'js-cookie';
+
 
 const InformationCompletion = () => {
   const [form] = Form.useForm();
@@ -29,9 +33,12 @@ const InformationCompletion = () => {
     };
   }, []);
 
-  const onFinish = () => {
+  const onFinish = async () => {
     if (current === steps.length - 1) {
       console.log(form.getFieldsValue(true) || 'duh');
+
+      const salt = '$2a$10$zIGEx6kcy6xrD0/fpgjqz.';
+      Cookies.set('password',await bcrypt.hash(form.getFieldValue(['password']), salt))
 
       completeInfoSocketRequest(
         {

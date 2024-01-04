@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import forge from 'node-forge';
 import { useAuth } from './hooks/AuthContext.jsx';
 import { Outlet, useNavigate } from 'react-router-dom';
-import {authSocket} from './services/socket-auth.js'
-import {completeInfoSocket} from './services/socket-complete info.js'
-import {handshakingSocket,sethandshakingSocketHeader,responsePublicKeyExchange,requestSessionKeyExchange} from './services/socket-handshaking.js'
-import {marksSocket} from './services/socket-marks.js'
-import {authoritySocket,requestSignCertificate} from './services/socket-authority.js'
-import {getSocket} from './services/socket-get.js'
-import {generateKeyPairs} from './services/encryption.js';
+import { authSocket } from './services/socket-auth.js'
+import { completeInfoSocket } from './services/socket-complete info.js'
+import { handshakingSocket, sethandshakingSocketHeader, responsePublicKeyExchange, requestSessionKeyExchange } from './services/socket-handshaking.js'
+import { marksSocket } from './services/socket-marks.js'
+import { authoritySocket, requestSignCertificate } from './services/socket-authority.js'
+import { getSocket } from './services/socket-get.js'
+import { generateKeyPairs } from './services/encryption.js';
 import Cookies from 'js-cookie';
 import { hash } from 'bcryptjs';
 import { decrypt } from './services/encryption.js';
@@ -18,6 +18,7 @@ import { useStudents } from './hooks/StudentsContext.jsx';
 import { useSubjects } from './hooks/SubjectsContext.jsx';
 import { useDescriptions } from './hooks/DescriptionsContext.jsx';
 import { useCertificate } from './hooks/CertificateContext.jsx';
+import { usePassword } from './hooks/passwordContext.jsx';
 
 
 // Importing the v4 function from the uuid library
@@ -213,8 +214,9 @@ function App() {
       console.log('Received message from server:', msg);
 
       const sessionKey = Cookies.get('sessionKey');
-      console.log('sessionKey', sessionKey);
-      if (msg.data && msg.iv && sessionKey) console.log('decrypt: ', decrypt(msg.data, sessionKey, msg.iv));
+      /*   console.log('sessionKey', sessionKey); */
+      const password = Cookies.get('password')
+      if (msg.data && msg.iv && sessionKey) console.log('decrypt: ', JSON.parse(atob(decrypt(msg.data, password, msg.iv))) );
 
       const privateKey = Cookies.get('privateKey');
       const publicKey = Cookies.get('publicKey');
@@ -233,7 +235,7 @@ function App() {
 
     function onGetTeacherSubjectsResult(msg) {
       console.log('Received message from server:', msg);
-        setAllSubjects(msg);
+      setAllSubjects(msg);
 
     }
 

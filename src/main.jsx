@@ -9,6 +9,7 @@ import { StudentProvider } from './hooks/StudentsContext.jsx';
 import { SubjectProvider } from './hooks/SubjectsContext.jsx';
 import { DescriptionProvider } from './hooks/DescriptionsContext.jsx';
 import { CertificateProvider } from './hooks/CertificateContext.jsx';
+import { PasswordProvider } from './hooks/passwordContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ConfigProvider
@@ -28,7 +29,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <SubjectProvider>
           <DescriptionProvider>
             <CertificateProvider>
-              <RouterProvider router={router} />
+              <PasswordProvider>
+                <RouterProvider router={router} />
+              </PasswordProvider>
+
             </CertificateProvider>
           </DescriptionProvider>
         </SubjectProvider>
