@@ -6,7 +6,6 @@ const PrivateRoute = ({ component }) => {
   const { token } = useAuth();
 
   useEffect(() => {
-    console.log('token: ', token);
   }, [token]);
 
   return <>{token ? component : <Navigate to="/login" />}</>;

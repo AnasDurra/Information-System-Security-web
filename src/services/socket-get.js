@@ -6,7 +6,6 @@ export const getSocket = io(URL + '/getSocket', {
 });
 
 export const requestGetTeacherSubjects = async (data) => {
-    console.log(data);
     getSocket.emit('getTeacherSubjects', data);
 };
 

@@ -6,11 +6,9 @@ export const authoritySocket = io(URL + '/authority', {
 });
 
 export const requestSignCertificate = async (data) => {
-    // console.log(data);
     authoritySocket.emit('signCertificate', data);
 };
 
 export const requestChallengeAswer = async (data) => {
-    console.log(data);
     authoritySocket.emit('challengeAnswer', data);
 };

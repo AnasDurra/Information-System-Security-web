@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { authoritySocket, requestChallengeAswer } from '../../services/socket-authority';
 
 const Verification = ({ equation }) => {
-  console.log(eval(equation));
 
   const [userAnswer, setUserAnswer] = useState(null);
   const [result, setResult] = useState(null);

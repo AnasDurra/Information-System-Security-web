@@ -23,12 +23,10 @@ export const sethandshakingSocketHeader = (headers) => {
 };
 export const responsePublicKeyExchange = async (data) => {
     handshakingSocket.emit('responsePublicKeyExchange', data);
-    // console.log("done");
 };
 
 export const requestSessionKeyExchange = async (data) => {
     handshakingSocket.emit('requestSessionKeyExchange', data);
-    console.log('done');
 };
 
 export const requestGetAllSubjects = async () => {
@@ -38,7 +36,6 @@ export const requestGetAllSubjects = async () => {
 export const requestSubmitProjects = async (data) => {
     const base64_data = btoa(JSON.stringify(data).toString());
     const iv = generateIV(32);
-    console.log('in socket', Cookies.get('sessionKey'));
     const encryptedData = encrypt(base64_data, Cookies.get('sessionKey'), iv);
 
     handshakingSocket.emit('submitProjects', { data: encryptedData, iv });

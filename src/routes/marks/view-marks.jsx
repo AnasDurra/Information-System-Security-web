@@ -47,7 +47,7 @@ function ViewMarks(props) {
   ];
 
   useEffect(() => {
-    // console.log(certificate);
+    
     setMarksSocketHeader({
       certificate: btoa(JSON.stringify(certificate).toString()),
     });
@@ -62,7 +62,6 @@ function ViewMarks(props) {
 
     function getMarksViaCertificateResult(msg) {
       if (msg.status === 200) {
-        console.log(Cookies.get('sessionKey'));
         const result = decrypt(msg.data.data, Cookies.get('sessionKey'), msg.data.iv);
         const modifiedData = JSON.parse(atob(result)).data.map((item) => {
           return { ...item, key: item.id };
@@ -84,7 +83,6 @@ function ViewMarks(props) {
     }
 
     if (selectedSubject) {
-      console.log(selectedSubject);
       getMarksViaCertificate({
         subject_id: selectedSubject,
       });

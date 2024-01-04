@@ -78,7 +78,6 @@ function ViewDescriptions(props) {
           Array.isArray(subjects) ? subjects.map((sub) => ({ value: sub?.subject?.id, label: sub?.subject?.name })) : []
         }
         onChange={(selectedSub) => {
-          console.log('selected Subject: ', selectedSub);
 
           setSubject(selectedSub);
         }}

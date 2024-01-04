@@ -27,7 +27,6 @@ export const marksSocketAdd = (data, access_token) => {
     const base64_data = btoa(JSON.stringify(data).toString());
     //TODO get the session key from cookies
     const sessionKey = Cookies.get('sessionKey');
-    console.log("sessionKey: ",sessionKey)
     const iv = generateIV(32);
 
     const { privateKey, publicKeyPem } = generateRSAKeyPair();
@@ -42,12 +41,10 @@ export const marksSocketAdd = (data, access_token) => {
         data: encryptedData,
         token: access_token,
     };
-    console.log('marks socktt: ',marksSocket.connected)
 
     marksSocket.emit('addMarks', msg);
 };
 
 export const getMarksViaCertificate = (data) => {
-    console.log(data);
     marksSocket.emit('getMarksViaCertificate', data);
 };

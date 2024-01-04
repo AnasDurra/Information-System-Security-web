@@ -54,16 +54,13 @@ function App() {
           role_id: user.role_id,
           public_key: Cookies.get('publicKey'),
         });
-        console.log(authoritySocket);
       } else {
-        console.log('Verified');
         sethandshakingSocketHeader({
           Authorization: authToken,
           certificate: btoa(JSON.stringify(certificate).toString()),
         });
         handshakingSocket.connect();
         setDoneHandShaking(false);
-        // console.log(handshakingSocket);
       }
 
       authoritySocket.on('challenge', onChallengeEvent);
@@ -75,17 +72,13 @@ function App() {
       handshakingSocket.on('responseSubmitProjects', onResponseSubmitProjects);
 
       function onResponseSubmitProjects(msg) {
-        console.log(msg);
       }
 
       function onCompleteHandshakingResult(msg) {
-        console.log('handshaking failed with message:', msg);
       }
 
       function onRequestPublicKeyExchange(msg) {
-        // console.log("data", msg);
         const ServerPublicKeyPem = msg.data.publicKey;
-        // console.log("server public key:", ServerPublicKeyPem);
         Cookies.set('serverPublicKey', ServerPublicKeyPem);
         const ServerPublicKey = forge.pki.publicKeyFromPem(ServerPublicKeyPem);
 
@@ -95,7 +88,6 @@ function App() {
         // Generate session key and request for exchange
         generateSessionKey().then((result) => {
           Cookies.set('sessionKey', result);
-          console.log('session key generated: ', result);
 
           // Encrypt the session key using the server public key
           const encrypted = ServerPublicKey.encrypt(result, 'RSA-OAEP');
@@ -103,12 +95,10 @@ function App() {
           // const encKeyToSend = forge.util.encode64(encrypted);
           requestSessionKeyExchange({ sessionKey: encrypted });
 
-          console.log(encrypted);
         });
       }
 
       function onResponseSessionKeyExchangeResult(msg) {
-        console.log('session key was exchanged successfully', msg);
         setDoneHandShaking(true);
       }
 
@@ -116,7 +106,6 @@ function App() {
         const data = {
           timestamp: Date.now(),
         };
-        // console.log("hashed", hash(JSON.stringify(data), 10));
         return await hash(JSON.stringify(data), 10);
       }
     }
@@ -125,7 +114,6 @@ function App() {
     function onChallengeEvent(msg) {
       setEquation(msg.challenge);
       setShowVerification(true);
-      // console.log('Challenge is :', msg);
     }
 
     function onCertificateResult(msg) {
@@ -135,7 +123,6 @@ function App() {
           setHasVerified(true);
           setCertificate(msg.certificate);
         }, 2000);
-        // console.log(msg.certificate);
       }
     }
 
@@ -172,7 +159,6 @@ function App() {
     }
 
     function onLoginResultEvent(msg) {
-      console.log(msg);
       setUser(msg.data);
       const privateKey = Cookies.get('privateKey');
       const publicKey = Cookies.get('publicKey');
@@ -181,7 +167,6 @@ function App() {
         handleKeys();
       }
       // //
-      console.log('Received message from server:', msg);
       if (msg.status >= 400 && msg.status < 500) console.log('LOGIN REJECTED', msg.error);
       else if (msg.status >= 200 && msg.status < 300) {
         console.log('LOGIN ACCEPTED');
@@ -190,7 +175,6 @@ function App() {
         login(msg.data.access_token);
 
         if (!(privateKey && publicKey)) {
-          console.log('nooo keys');
           handleKeys();
         }
 
@@ -199,7 +183,6 @@ function App() {
     }
 
     function onRegistrationResultEvent(msg) {
-      console.log('Received message from server:', msg);
       if (msg.status >= 400 && msg.status < 500) console.log('REGISTER REJECTED');
       else if (msg.status >= 200 && msg.status < 300) {
         console.log('REGISTER ACCEPTED');
@@ -211,11 +194,10 @@ function App() {
     }
 
     function onCompleteInfoResult(msg) {
-      console.log('Received message from server:', msg);
 
       const sessionKey = Cookies.get('sessionKey');
-      /*   console.log('sessionKey', sessionKey); */
       const password = Cookies.get('password')
+
       if (msg.data && msg.iv && sessionKey) console.log('decrypt: ', JSON.parse(atob(decrypt(msg.data, password, msg.iv))) );
 
       const privateKey = Cookies.get('privateKey');
@@ -230,24 +212,20 @@ function App() {
     }
 
     function onAddMarksResult(msg) {
-      console.log('Received message from server add marks:', msg);
     }
 
     function onGetTeacherSubjectsResult(msg) {
-      console.log('Received message from server:', msg);
       setAllSubjects(msg);
 
     }
 
     function onGetStudentsResult(msg) {
-      console.log('Received message from server:', msg);
       if (msg.status >= 200 && msg.status < 300) {
         setAllStudents(msg.data);
       }
     }
 
     function onGetSubjectDescriptions(msg) {
-      console.log('Received message from server:', msg);
       if (msg.status >= 200 && msg.status < 300) {
         setAllDescriptions(msg.data);
       }

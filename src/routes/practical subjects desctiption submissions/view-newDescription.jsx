@@ -22,14 +22,11 @@ function ViewNewDescription() {
 
   const [options, setOptions] = useState([]);
   useEffect(() => {
-    // console.log(handshakingSocket);
     requestGetAllSubjects();
 
     handshakingSocket.on('responseGetAllSubjects', onResponseGetAllSubjects);
 
     function onResponseGetAllSubjects(msg) {
-      console.log(msg);
-
       // DECODING
       // Prepare data
       const encrypted = msg.data;
@@ -42,6 +39,8 @@ function ViewNewDescription() {
       // 4.Print the output
       const jsonData = JSON.stringify(parsed);
 
+      console.log(jsonData);
+
       const data = [];
 
       for (let i = 0; i < parsed.length; i++) {
@@ -52,7 +51,6 @@ function ViewNewDescription() {
         data.push(obj);
       }
       setOptions(data);
-      console.log(data);
     }
 
     return () => {
@@ -79,7 +77,6 @@ function ViewNewDescription() {
           };
 
           requestSubmitProjects(data);
-          console.log(data);
         }}
       >
         <div style={{ margin: '2em', width: '100%' }}>

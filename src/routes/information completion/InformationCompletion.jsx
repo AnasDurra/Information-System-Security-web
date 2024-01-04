@@ -19,13 +19,6 @@ const InformationCompletion = () => {
   const { token: authToken } = useAuth();
 
   useEffect(() => {
-    /* console.log('auth', authToken);
-    completeInfoSocket.auth = {
-      ...completeInfoSocket.auth,
-      auth: `Bearer ${authToken}`,
-    };
-    console.log(completeInfoSocket); */
-
     completeInfoSocket.connect();
 
     return () => {
@@ -35,7 +28,6 @@ const InformationCompletion = () => {
 
   const onFinish = async () => {
     if (current === steps.length - 1) {
-      console.log(form.getFieldsValue(true) || 'duh');
 
       const salt = '$2a$10$zIGEx6kcy6xrD0/fpgjqz.';
       Cookies.set('password',await bcrypt.hash(form.getFieldValue(['password']), salt))

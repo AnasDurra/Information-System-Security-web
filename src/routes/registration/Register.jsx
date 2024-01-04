@@ -33,7 +33,6 @@ const Register = () => {
 
     if (values.user_type === 'professor') {
       authSocketRegisterProfessor(credentials);
-      console.log('gi');
     } else if (values.user_type === 'student') {
       authSocketRegisterStudent(credentials);
     }
