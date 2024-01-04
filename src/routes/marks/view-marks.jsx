@@ -70,10 +70,8 @@ function ViewMarks(props) {
 
       if (msg.status === 200) {
         console.log(Cookies.get('sessionKey'));
-        const data = decrypt(msg.data.data, Cookies.get('sessionKey'), msg.data.iv);
-        console.log(JSON.parse(atob(data)));
-        setData(JSON.parse(atob(data)));
-        const modifiedData = data.map((item) => {
+        const result = decrypt(msg.data.data, Cookies.get('sessionKey'), msg.data.iv);
+        const modifiedData = JSON.parse(atob(result)).data.map((item) => {
           return { ...item, key: item.id };
         });
         setData(modifiedData);
