@@ -66,8 +66,8 @@ function ViewMarks(props) {
       if (msg.status === 200) {
         console.log(Cookies.get('sessionKey'));
         const data = decrypt(msg.data.data, Cookies.get('sessionKey'), msg.data.iv);
-        console.log(data);
-        // console.log(JSON.parse(atob(data)));
+        // console.log(data);
+        console.log(JSON.parse(atob(data)));
       }
     }
 
