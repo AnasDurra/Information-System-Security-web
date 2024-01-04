@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Select, Table } from 'antd';
 import { FaDownload } from 'react-icons/fa';
 import Title from 'antd/es/typography/Title';
-import { getSocketGetTeacherSubjects } from '../../services/sockests';
+import { getSocketGetTeacherSubjects } from '../../services/socket-get.js';
 import { useSubjects } from '../../hooks/SubjectsContext';
 import { useAuth } from '../../hooks/AuthContext';
 import { useDescriptions } from '../../hooks/DescriptionsContext';
@@ -19,7 +19,11 @@ function ViewDescriptions(props) {
 
   const columns = [
     {
-      title: `Submissions For Subject ${subject?.label}`,
+      title: `Submissions For Subject ${
+        Array.isArray(subjects) && subjects.length > 0
+          ? subjects.find((element) => element.subject?.id === subject)?.subject?.name
+          : 'Unknown Subject'
+      }`,
       children: [
         {
           title: 'Student Name',
@@ -70,10 +74,12 @@ function ViewDescriptions(props) {
       <Select
         style={{ width: '50%' }}
         placeholder="Select Subject"
-        options={subjects?.map((sub) => {
-          return { value: sub?.subject?.id, label: sub?.subject?.name };
-        })}
+        options={
+          Array.isArray(subjects) ? subjects.map((sub) => ({ value: sub?.subject?.id, label: sub?.subject?.name })) : []
+        }
         onChange={(selectedSub) => {
+          console.log('selected Subject: ', selectedSub);
+
           setSubject(selectedSub);
         }}
       />

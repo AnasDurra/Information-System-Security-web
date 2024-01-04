@@ -3,7 +3,7 @@ import { Breadcrumb, Button, Divider, Form, Input, Steps, theme, Typography } fr
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext.jsx';
-import { completeInfoSocket, completeInfoSocketRequest } from '../../services/sockests.js';
+import { completeInfoSocket, completeInfoSocketRequest } from '../../services/socket-complete info.js';
 import { IoPersonOutline } from 'react-icons/io5';
 
 const InformationCompletion = () => {

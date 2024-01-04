@@ -1,7 +1,7 @@
 import { Button, Card, Flex, Input, Result, Row, Spin, Typography, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authoritySocket, requestChallengeAswer } from '../../services/sockests';
+import { authoritySocket, requestChallengeAswer } from '../../services/socket-authority';
 
 const Verification = ({ equation }) => {
   console.log(equation);

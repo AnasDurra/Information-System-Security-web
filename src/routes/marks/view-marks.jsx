@@ -2,16 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Select, Table } from 'antd';
 import Title from 'antd/es/skeleton/Title';
 import { useAuth } from '../../hooks/AuthContext';
-import {
-  getMarksViaCertificate,
-  getSocket,
-  marksSocket,
-  requestGetTeacherSubjects,
-  setMarksSocketHeader,
-} from '../../services/sockests';
 import { useCertificate } from '../../hooks/CertificateContext';
 import { decrypt } from '../../services/encryption';
 import Cookies from 'js-cookie';
+import {getMarksViaCertificate} from "../../services/socket-marks.js";
+import {getSocket,requestGetTeacherSubjects} from  '../../services/socket-get'
+import {marksSocket,setMarksSocketHeader} from  '../../services/socket-marks.js'
 
 function ViewMarks(props) {
   const { token: authToken } = useAuth();

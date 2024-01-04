@@ -3,13 +3,8 @@ import { Button, Col, Divider, Form, Input, InputNumber, Row, Select, Space } fr
 import { CloseOutlined } from '@ant-design/icons';
 import Title from 'antd/es/typography/Title.js';
 import FormItemLabel from 'antd/es/form/FormItemLabel.js';
-import {
-  getSocket,
-  getSocketGetAllStudents,
-  getSocketGetTeacherSubjects,
-  marksSocket,
-  marksSocketAdd,
-} from '../../services/sockests';
+import { getSocket, getSocketGetAllStudents, getSocketGetTeacherSubjects } from '../../services/socket-get.js';
+import { marksSocket, marksSocketAdd } from '../../services/socket-marks.js';
 import { useAuth } from '../../hooks/AuthContext';
 import { useSubjects } from '../../hooks/SubjectsContext';
 import { useStudents } from '../../hooks/StudentsContext';
@@ -70,9 +65,11 @@ function ViewNewMarks(props) {
                 style={{
                   width: '20%',
                 }}
-                options={subjects?.map((sub) => {
-                  return { value: sub?.subject?.id, label: sub?.subject?.name };
-                })}
+                options={
+                  Array.isArray(subjects)
+                    ? subjects.map((sub) => ({ value: sub?.subject?.id, label: sub?.subject?.name }))
+                    : []
+                }
               />
             </Form.Item>
           </Col>

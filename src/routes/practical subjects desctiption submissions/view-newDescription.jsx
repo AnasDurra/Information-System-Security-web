@@ -4,18 +4,13 @@ import Dragger from 'antd/es/upload/Dragger.js';
 import TextArea from 'antd/es/input/TextArea.js';
 import { TiUploadOutline } from 'react-icons/ti';
 import Title from 'antd/es/typography/Title.js';
-
-import {
-  getSocketGetTeacherSubjects,
-  handshakingSocket,
-  requestGetAllSubjects,
-  requestSubmitProjects,
-} from '../../services/sockests.js';
 import forge from 'node-forge';
 import { useAuth } from '../../hooks/AuthContext.jsx';
 import { decrypt, encrypt } from '../../services/encryption.js';
 import Cookies from 'js-cookie';
 import { useSubjects } from '../../hooks/SubjectsContext.jsx';
+import {getSocketGetTeacherSubjects} from '../../services/socket-get.js'
+import {handshakingSocket,requestGetAllSubjects,requestSubmitProjects} from '../../services/socket-handshaking.js'
 
 function ViewNewDescription(props) {
   const { token: authToken } = useAuth();

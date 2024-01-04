@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import LoginImage from '../../assets/login.png';
 import { Link, useNavigate } from 'react-router-dom';
-import { authSocket, authSocketRegisterProfessor, authSocketRegisterStudent } from '../../services/sockests.js';
+import { authSocket, authSocketRegisterProfessor, authSocketRegisterStudent } from '../../services/socket-auth.js';
 
 const Register = () => {
   const navigate = useNavigate();
