@@ -55,7 +55,7 @@ function ViewMarks(props) {
     });
     marksSocket.connect();
 
-    getsocket.connect();
+    getSocket.connect();
 
     requestGetTeacherSubjects({ access_token: authToken });
 
