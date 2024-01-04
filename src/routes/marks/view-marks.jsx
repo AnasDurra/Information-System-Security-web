@@ -14,27 +14,31 @@ function ViewMarks(props) {
   const { certificate } = useCertificate();
 
   const [options, setOptions] = useState([]);
+  const [data, setData] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const columns = [
     {
-      title: 'Marks For Subject Xx',
+      title: selectedSubject ? `Marks For Subject ${selectedSubject}` : '',
       children: [
         {
+          title: 'Student ID',
+          dataIndex: 'student_id',
+          key: 'id',
+          width: '10%',
+          sorter: (a, b) => a.student_id - b.student_id,
+          sortDirections: ['ascend', 'descend'],
+          defaultSortOrder: 'ascend',
+        },
+        {
           title: 'Student Name',
-          dataIndex: 'name',
+          dataIndex: ['student', 'name'],
           key: 'name',
           width: '30%',
         },
         {
           title: 'Mark',
           dataIndex: 'mark',
-          key: 'age',
-          width: '20%',
-        },
-        {
-          title: 'Submission Date',
-          dataIndex: 'submissionDate',
-          key: 'submissionDate',
+          key: 'mark',
           width: '20%',
         },
         {
@@ -46,8 +50,9 @@ function ViewMarks(props) {
       ],
     },
   ];
+
   useEffect(() => {
-    console.log(certificate);
+    // console.log(certificate);
     setMarksSocketHeader({
       certificate: btoa(JSON.stringify(certificate).toString()),
     });
@@ -66,8 +71,11 @@ function ViewMarks(props) {
       if (msg.status === 200) {
         console.log(Cookies.get('sessionKey'));
         const data = decrypt(msg.data.data, Cookies.get('sessionKey'), msg.data.iv);
-        // console.log(data);
-        console.log(JSON.parse(atob(data)));
+        setData(JSON.parse(atob(data)));
+        const modifiedData = data.map((item) => {
+          return { ...item, key: item.id };
+        });
+        setData(modifiedData);
       }
     }
 
