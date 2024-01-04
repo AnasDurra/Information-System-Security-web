@@ -4,12 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { authoritySocket, requestChallengeAswer } from '../../services/socket-authority';
 
 const Verification = ({ equation }) => {
-  console.log(equation);
   console.log(eval(equation));
+
   const [userAnswer, setUserAnswer] = useState(null);
   const [result, setResult] = useState(null);
   const [messageApi, contextHolder] = message.useMessage();
-  // const navigate = useNavigate();
 
   const [hasAnswered, setHasAnswered] = useState(false);
 
@@ -33,7 +32,6 @@ const Verification = ({ equation }) => {
   }, []);
 
   const onClick = () => {
-    console.log(parseInt(userAnswer), result);
     if (parseInt(userAnswer) === result) {
       requestChallengeAswer({ answer: parseInt(userAnswer) });
     } else {
@@ -42,21 +40,6 @@ const Verification = ({ equation }) => {
         content: 'Wrong answer , please check your answer!',
       });
     }
-    // if (parseInt(userAnswer) === result) {
-    //   setHasAnswered(true);
-    //   messageApi.open({
-    //     type: 'success',
-    //     content: 'Your identity has been verified!',
-    //   });
-    //   setTimeout(() => {
-    //     navigate('/');
-    //   }, 2000);
-    // } else {
-    //   messageApi.open({
-    //     type: 'error',
-    //     content: 'Wrong answer , please check your answer!',
-    //   });
-    // }
   };
   return (
     <div

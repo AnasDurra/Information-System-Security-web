@@ -16,6 +16,7 @@ function ViewMarks(props) {
   const [options, setOptions] = useState([]);
   const [data, setData] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
+  const [selectedSubjectName, setSelectedSubjectName] = useState(null);
   const columns = [
     {
       title: selectedSubject ? `Marks For Subject ${selectedSubject}` : '',
@@ -60,8 +61,6 @@ function ViewMarks(props) {
     marksSocket.on('getMarksViaCertificateResult', getMarksViaCertificateResult);
 
     function getMarksViaCertificateResult(msg) {
-      console.log(msg);
-
       if (msg.status === 200) {
         console.log(Cookies.get('sessionKey'));
         const result = decrypt(msg.data.data, Cookies.get('sessionKey'), msg.data.iv);
@@ -119,29 +118,5 @@ function ViewMarks(props) {
     </div>
   );
 }
-
-const data = [
-  {
-    key: '1',
-    name: 'John Doe',
-    mark: 85,
-    submissionDate: '2023-01-01',
-    submittedBy: 'Teacher A',
-  },
-  {
-    key: '2',
-    name: 'Jane Smith',
-    mark: 92,
-    submissionDate: '2023-01-02',
-    submittedBy: 'Teacher B',
-  },
-  {
-    key: '3',
-    name: 'Alice Johnson',
-    mark: 78,
-    submissionDate: '2023-01-03',
-    submittedBy: 'Teacher C',
-  },
-];
 
 export default ViewMarks;

@@ -9,8 +9,8 @@ import { useAuth } from '../../hooks/AuthContext.jsx';
 import { decrypt, encrypt } from '../../services/encryption.js';
 import Cookies from 'js-cookie';
 import { useSubjects } from '../../hooks/SubjectsContext.jsx';
-import {getSocketGetTeacherSubjects} from '../../services/socket-get.js'
-import {handshakingSocket,requestGetAllSubjects,requestSubmitProjects} from '../../services/socket-handshaking.js'
+import { getSocketGetTeacherSubjects } from '../../services/socket-get.js';
+import { handshakingSocket, requestGetAllSubjects, requestSubmitProjects } from '../../services/socket-handshaking.js';
 
 function ViewNewDescription(props) {
   const { token: authToken } = useAuth();
@@ -29,37 +29,33 @@ function ViewNewDescription(props) {
 
     function onResponseGetAllSubjects(msg) {
       console.log(msg);
-      // console.log(Cookies.get("sessionKey"));
-      // // DECODING
-      // // Prepare data
-      // const encrypted = msg.data;
-      // 1. Decode from base64
-      // const decodedFromBase64 = forge.util.decode64(encrypted);
-      // 2. Decrypt Data
-      // const decryptedData = decrypt(
-      //     encrypted,
-      //     Cookies.get("sessionKey"),
-      //     msg.iv
-      // );
-      // // 3. Base64 decode
-      // const jsonString = atob(decryptedData);
-      // // 4. Parse data back from JSON
-      // const parsed = JSON.parse(jsonString);
-      // // Print the output
-      // console.log(jsonString);
-      // const jsonData = JSON.stringify(data);
+      console.log(Cookies.get('sessionKey'));
 
-      const data = [];
+      // DECODING
+      // Prepare data
+      const encrypted = msg.data;
+      // 1. Decrypt Data
+      const decryptedData = decrypt(encrypted, Cookies.get('sessionKey'), msg.iv);
+      // 2. Base64 decode
+      const jsonString = atob(decryptedData);
+      // 3. Parse data back from JSON
+      const parsed = JSON.parse(jsonString);
+      // 4.Print the output
+      const jsonData = JSON.stringify(data);
 
-      for (let i = 0; i < msg.data.length; i++) {
-        const obj = {
-          label: msg.data[i].name,
-          value: msg.data[i].id,
-        };
-        data.push(obj);
-      }
-      setOptions(data);
-      console.log(options);
+      console.log(jsonData);
+
+      // const data = [];
+
+      // for (let i = 0; i <jsonData.length; i++) {
+      //   const obj = {
+      //     label: jsonData[i].name,
+      //     value: jsonData[i].id,
+      //   };
+      //   data.push(obj);
+      // }
+      // setOptions(data);
+      // console.log(options);
     }
 
     return () => {
