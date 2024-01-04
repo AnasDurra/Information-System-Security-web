@@ -50,3 +50,27 @@ const verifyMessage = (message, signature, publicKey) => {
 
   return verified;
 };
+
+export function generateIV(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters.charAt(randomIndex);
+  }
+  return result;
+}
+
+export const generateKeyPairs = async () => {
+  const { publicKey, privateKey } = forge.pki.rsa.generateKeyPair({
+    bits: 2048,
+  });
+
+  const publicPem = forge.pki.publicKeyToPem(publicKey);
+  const privatePem = forge.pki.privateKeyToPem(privateKey);
+
+  return Promise.resolve({ publicKey: publicPem, privateKey: privatePem });
+};
+
+

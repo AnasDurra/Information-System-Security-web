@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Select, Table } from 'antd';
 import { FaDownload } from 'react-icons/fa';
 import Title from 'antd/es/typography/Title';
-import { getSocketGetTeacherSubjects } from '../../services/sockests';
+import { getSocketGetTeacherSubjects } from '../../services/socket-get.js';
 import { useSubjects } from '../../hooks/SubjectsContext';
 import { useAuth } from '../../hooks/AuthContext';
 import { useDescriptions } from '../../hooks/DescriptionsContext';
@@ -19,7 +19,7 @@ function ViewDescriptions(props) {
 
   const columns = [
     {
-      title: `Submissions For Subject ${subject?.label}`,
+      title: `Submissions For Subject ${subjects.find(element => element.subject?.id === subject)?.subject?.name}`,
       children: [
         {
           title: 'Student Name',
@@ -74,6 +74,9 @@ function ViewDescriptions(props) {
           return { value: sub?.subject?.id, label: sub?.subject?.name };
         })}
         onChange={(selectedSub) => {
+
+          console.log("selected Subject: ",selectedSub)
+
           setSubject(selectedSub);
         }}
       />

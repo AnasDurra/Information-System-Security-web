@@ -5,7 +5,7 @@ import { Button, Form, Image, Input, message, Typography } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import './style.css';
 import LoginImage from '../../assets/account.png';
-import { authSocket, authSocketLogin } from '../../services/sockests.js';
+import { authSocket, authSocketLogin } from '../../services/socket-auth.js';
 import { useAuth } from '../../hooks/AuthContext.jsx';
 // import cloudImage from "../../assets/login.png";
 

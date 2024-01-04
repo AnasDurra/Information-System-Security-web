@@ -2,19 +2,13 @@ import React, { useEffect, useState } from 'react';
 import forge from 'node-forge';
 import { useAuth } from './hooks/AuthContext.jsx';
 import { Outlet, useNavigate } from 'react-router-dom';
-import {
-  authSocket,
-  completeInfoSocket,
-  handshakingSocket,
-  requestSessionKeyExchange,
-  responsePublicKeyExchange,
-  sethandshakingSocketHeader,
-  marksSocket,
-  authoritySocket,
-  requestSignCertificate,
-  getSocket,
-} from './services/sockests.js';
-import generateKeyPairs from './services/keys.js';
+import {authSocket} from './services/socket-auth.js'
+import {completeInfoSocket} from './services/socket-complete info.js'
+import {handshakingSocket,sethandshakingSocketHeader,responsePublicKeyExchange,requestSessionKeyExchange} from './services/socket-handshaking.js'
+import {marksSocket} from './services/socket-marks.js'
+import {authoritySocket,requestSignCertificate} from './services/socket-authority.js'
+import {getSocket} from './services/socket-get.js'
+import {generateKeyPairs} from './services/encryption.js';
 import Cookies from 'js-cookie';
 import { hash } from 'bcryptjs';
 import { decrypt } from './services/encryption.js';
@@ -24,6 +18,7 @@ import { useStudents } from './hooks/StudentsContext.jsx';
 import { useSubjects } from './hooks/SubjectsContext.jsx';
 import { useDescriptions } from './hooks/DescriptionsContext.jsx';
 import { useCertificate } from './hooks/CertificateContext.jsx';
+
 
 // Importing the v4 function from the uuid library
 // import { v4 as uuidv4 } from "uuid";
@@ -233,14 +228,13 @@ function App() {
     }
 
     function onAddMarksResult(msg) {
-      console.log('Received message from server:', msg);
+      console.log('Received message from server add marks:', msg);
     }
 
     function onGetTeacherSubjectsResult(msg) {
       console.log('Received message from server:', msg);
-      if (msg.status >= 200 && msg.status < 300) {
-        setAllSubjects(msg.data);
-      }
+        setAllSubjects(msg);
+
     }
 
     function onGetStudentsResult(msg) {

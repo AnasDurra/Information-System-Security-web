@@ -7,9 +7,8 @@ import {
   getSocket,
   getSocketGetAllStudents,
   getSocketGetTeacherSubjects,
-  marksSocket,
-  marksSocketAdd,
-} from '../../services/sockests';
+} from '../../services/socket-get.js';
+import {marksSocket,marksSocketAdd}from '../../services/socket-marks.js'
 import { useAuth } from '../../hooks/AuthContext';
 import { useSubjects } from '../../hooks/SubjectsContext';
 import { useStudents } from '../../hooks/StudentsContext';
